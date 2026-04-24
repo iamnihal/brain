@@ -1,0 +1,2383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Brain • The Story of You</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', system_ui, sans-serif;
+            font-weight: 600;
+        }
+
+        .neural-bg {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 100%);
+        }
+
+        .section-header {
+            font-size: 3.5rem;
+            line-height: 1.05;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+        }
+
+        .elegant-interaction {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scroll-reveal {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .scroll-reveal.animate-in {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        .scroll-reveal.animate-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .neural-line {
+            stroke: #6366f1;
+            stroke-width: 2;
+            stroke-opacity: 0.6;
+            transition: stroke-opacity 0.3s ease;
+        }
+
+        /* Subtle animations for Interaction 03 */
+        @keyframes thought-glow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(1.08); }
+        }
+
+        #eye-icon {
+            animation: eye-blink 3.5s ease-in-out infinite;
+        }
+
+        @keyframes eye-blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            92%, 98% { transform: scaleY(0.1); }
+        }
+
+        @keyframes pop-in {
+            0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes heartbeat-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Elegant Chapter Transition Effects */
+        .chapter-header {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .chapter-header.animate-in {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+        .chapter-header.animate-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .chapter-header .neural-glow {
+            box-shadow: 0 0 0 rgba(99, 102, 241, 0);
+            transition: box-shadow 0.6s ease;
+        }
+        
+        .chapter-header.visible .neural-glow {
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+        }
+
+        /* ── Progress Bar ── */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+            z-index: 200;
+            transition: width 0.1s linear;
+        }
+
+        /* ── Chapter Dot Nav ── */
+        #chapter-dots {
+            position: fixed;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+        .ch-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .ch-dot:hover { background: rgba(255,255,255,0.6); transform: scale(1.3); }
+        .ch-dot.active {
+            background: #6366f1;
+            box-shadow: 0 0 8px rgba(99,102,241,0.8);
+            transform: scale(1.4);
+        }
+        .ch-dot .dot-label {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            white-space: nowrap;
+            color: rgba(255,255,255,0.7);
+            background: rgba(10,10,18,0.85);
+            padding: 3px 8px;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .ch-dot:hover .dot-label { opacity: 1; }
+
+        /* ── Chapter Bridge ── */
+        .chapter-bridge {
+            max-width: 56rem;
+            margin: 0 auto;
+            padding: 1.5rem 1.5rem;
+            text-align: center;
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.7s ease;
+        }
+        .chapter-bridge.animate-in { opacity: 0; transform: translateY(20px); }
+        .chapter-bridge.animate-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── Story Pull Quote ── */
+        .story-block {
+            border-left: 3px solid rgba(99,102,241,0.5);
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            background: rgba(99,102,241,0.04);
+            border-radius: 0 1rem 1rem 0;
+        }
+
+        /* ── Reaction Time Meter ── */
+        @keyframes flash-in {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .flash-in { animation: flash-in 0.15s ease-out forwards; }
+
+        /* ── EEG Wave ── */
+        @keyframes eeg-scroll {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+        .eeg-wave-path { animation: eeg-scroll 3s linear infinite; }
+
+        /* ── Trolley / pulse ── */
+        @keyframes trolley-roll {
+            from { transform: translateX(-30px); }
+            to   { transform: translateX(0px); }
+        }
+
+        /* ── Umwelt colour overlay ── */
+        #umwelt-overlay {
+            transition: all 0.6s ease;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+
+        /* ── Synesthesia letters ── */
+        .syn-letter {
+            display: inline-block;
+            width: 2.5rem; height: 2.5rem;
+            line-height: 2.5rem;
+            text-align: center;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            cursor: default;
+            user-select: none;
+        }
+
+        /* ── Flow meter bar fill ── */
+        #flow-fill {
+            transition: width 0.05s linear;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+        }
+
+        /* ═══════════════════════════════════════════════
+           VISUAL POLISH ADDITIONS
+        ═══════════════════════════════════════════════ */
+
+        /* ── Ambient particle canvas ── */
+        #ambient-particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+        }
+
+        /* ── Ensure all content sits above particle layer ── */
+        nav, header, main, section, footer,
+        #chapter-dots, #progress-bar,
+        .max-w-4xl, .max-w-5xl {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Hero headline gradient animation ── */
+        @keyframes gradient-shift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .hero-gradient-text {
+            background: linear-gradient(270deg, #818cf8, #c084fc, #f472b6, #60a5fa, #818cf8);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 8s ease infinite;
+        }
+
+        /* ── Chapter number badge ── */
+        .chapter-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.35rem 1rem;
+            background: rgba(99,102,241,0.12);
+            border: 1px solid rgba(99,102,241,0.25);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-family: monospace;
+            letter-spacing: 0.2em;
+            color: #a5b4fc;
+            backdrop-filter: blur(8px);
+        }
+        .chapter-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #6366f1;
+            box-shadow: 0 0 6px #6366f1;
+            display: inline-block;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.5; transform: scale(0.7); }
+        }
+
+        /* ── Glassmorphism interaction cards ── */
+        .glass-card {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1.75rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(99,102,241,0.3);
+            box-shadow: 0 0 40px rgba(99,102,241,0.08);
+        }
+
+        /* ── Interaction label pill ── */
+        .interaction-label {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-family: monospace;
+            letter-spacing: 0.18em;
+            color: #818cf8;
+            padding: 0.25rem 0.75rem;
+            background: rgba(99,102,241,0.1);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 100px;
+            margin-bottom: 0.75rem;
+        }
+
+        /* ── Section divider line ── */
+        .chapter-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent);
+            margin: 0;
+        }
+
+        /* ── Quote block enhanced ── */
+        .quote-block {
+            position: relative;
+            padding: 2rem 2.5rem;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(168,85,247,0.04));
+            border: 1px solid rgba(99,102,241,0.15);
+            text-align: center;
+            overflow: hidden;
+        }
+        .quote-block::before {
+            content: '"';
+            position: absolute;
+            top: -0.5rem; left: 1rem;
+            font-size: 8rem;
+            line-height: 1;
+            color: rgba(99,102,241,0.08);
+            font-family: Georgia, serif;
+            pointer-events: none;
+        }
+
+        /* ── Stat number glow ── */
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Hover lift on info cards ── */
+        .hover-lift {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+        }
+
+        /* ── Section header animated underline ── */
+        .section-header {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            line-height: 1.05;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+        }
+        h2.section-header::after {
+            content: '';
+            display: block;
+            width: 3rem;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            border-radius: 2px;
+            margin-top: 1.25rem;
+            transform-origin: left;
+            animation: expand-line 1s ease-out forwards;
+        }
+        @keyframes expand-line {
+            from { transform: scaleX(0); opacity: 0; transform-origin: left; }
+            to   { transform: scaleX(1); opacity: 1; transform-origin: left; }
+        }
+
+        /* ── Hero ambient ring ── */
+        @keyframes ring-pulse {
+            0%,100% { opacity: 0.12; transform: scale(1); }
+            50%      { opacity: 0.22; transform: scale(1.06); }
+        }
+        .hero-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(99,102,241,0.3);
+            animation: ring-pulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        /* ── Chapter colour accent per chapter ── */
+        #chapter-1 { --ch-color: #6366f1; --ch-color-rgb: 99,102,241; }
+        #chapter-2 { --ch-color: #a855f7; --ch-color-rgb: 168,85,247; }
+        #chapter-3 { --ch-color: #ec4899; --ch-color-rgb: 236,72,153; }
+        #chapter-4 { --ch-color: #f472b6; --ch-color-rgb: 244,114,182; }
+        #chapter-5 { --ch-color: #fb7185; --ch-color-rgb: 251,113,133; }
+        #chapter-6 { --ch-color: #2dd4bf; --ch-color-rgb: 45,212,191; }
+
+        /* ── Per-chapter ambient background glow ── */
+        @keyframes blob-drift-left {
+            0%   { transform: translate(0px,   0px)   scale(1);    }
+            33%  { transform: translate(30px,  -40px) scale(1.05); }
+            66%  { transform: translate(-20px, 30px)  scale(0.97); }
+            100% { transform: translate(0px,   0px)   scale(1);    }
+        }
+        @keyframes blob-drift-right {
+            0%   { transform: translate(0px,   0px)   scale(1);    }
+            33%  { transform: translate(-30px, 40px)  scale(1.04); }
+            66%  { transform: translate(20px,  -30px) scale(0.98); }
+            100% { transform: translate(0px,   0px)   scale(1);    }
+        }
+        @keyframes blob-pulse {
+            0%,100% { opacity: 0.07; }
+            50%     { opacity: 0.12; }
+        }
+        @keyframes blob-pulse-teal {
+            0%,100% { opacity: 0.09; }
+            50%     { opacity: 0.15; }
+        }
+
+        #chapter-1, #chapter-2, #chapter-3,
+        #chapter-4, #chapter-5, #chapter-6 {
+            position: relative;
+        }
+
+        #chapter-1::after  {
+            content:''; position:absolute; pointer-events:none;
+            border-radius:50%; filter:blur(120px);
+            opacity:0.07; top:10%; left:-10%;
+            width:600px; height:600px; background: #6366f1; z-index:0;
+            animation: blob-drift-left 18s ease-in-out infinite, blob-pulse 8s ease-in-out infinite;
+        }
+        #chapter-2::after  {
+            content:''; position:absolute; pointer-events:none;
+            border-radius:50%; filter:blur(120px);
+            opacity:0.07; top:5%; right:-10%;
+            width:600px; height:600px; background: #a855f7; z-index:0;
+            animation: blob-drift-right 22s ease-in-out infinite, blob-pulse 10s ease-in-out infinite;
+        }
+        #chapter-3::after  {
+            content:''; position:absolute; pointer-events:none;
+            border-radius:50%; filter:blur(120px);
+            opacity:0.07; top:15%; left:-5%;
+            width:500px; height:500px; background: #ec4899; z-index:0;
+            animation: blob-drift-left 20s ease-in-out infinite 2s, blob-pulse 9s ease-in-out infinite 1s;
+        }
+        #chapter-4::after  {
+            content:''; position:absolute; pointer-events:none;
+            border-radius:50%; filter:blur(120px);
+            opacity:0.07; top:8%; right:-5%;
+            width:550px; height:550px; background: #f472b6; z-index:0;
+            animation: blob-drift-right 24s ease-in-out infinite 1s, blob-pulse 11s ease-in-out infinite;
+        }
+        #chapter-5::after  {
+            content:''; position:absolute; pointer-events:none;
+            border-radius:50%; filter:blur(120px);
+            opacity:0.07; top:12%; left:-8%;
+            width:550px; height:550px; background: #fb7185; z-index:0;
+            animation: blob-drift-left 19s ease-in-out infinite 3s, blob-pulse 8s ease-in-out infinite 2s;
+        }
+        #chapter-6::after  {
+            content:''; position:absolute; pointer-events:none;
+            border-radius:50%; filter:blur(120px);
+            opacity:0.09; top:5%; right:-8%;
+            width:600px; height:600px; background: #2dd4bf; z-index:0;
+            animation: blob-drift-right 25s ease-in-out infinite, blob-pulse-teal 12s ease-in-out infinite;
+        }
+
+        /* Ensure chapter content sits above the glow blob */
+        #chapter-1 > *, #chapter-2 > *, #chapter-3 > *,
+        #chapter-4 > *, #chapter-5 > *, #chapter-6 > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            #chapter-1::after, #chapter-2::after, #chapter-3::after,
+            #chapter-4::after, #chapter-5::after, #chapter-6::after {
+                animation: none;
+            }
+        }
+
+        .chapter-accent-border {
+            border-top: 1px solid;
+            border-image: linear-gradient(90deg, transparent, var(--ch-color), transparent) 1;
+            padding-top: 4rem;
+        }
+
+        /* ── Chapter-coloured top border glow on scroll-in ── */
+        #chapter-2, #chapter-3, #chapter-4, #chapter-5, #chapter-6 {
+            border-top: 1px solid rgba(255,255,255,0.07);
+            position: relative;
+        }
+        #chapter-2::before { content:''; position:absolute; top:-1px; left:10%; right:10%; height:1px; background: linear-gradient(90deg, transparent, #a855f7, transparent); }
+        #chapter-3::before { content:''; position:absolute; top:-1px; left:10%; right:10%; height:1px; background: linear-gradient(90deg, transparent, #ec4899, transparent); }
+        #chapter-4::before { content:''; position:absolute; top:-1px; left:10%; right:10%; height:1px; background: linear-gradient(90deg, transparent, #f472b6, transparent); }
+        #chapter-5::before { content:''; position:absolute; top:-1px; left:10%; right:10%; height:1px; background: linear-gradient(90deg, transparent, #fb7185, transparent); }
+        #chapter-6::before { content:''; position:absolute; top:-1px; left:10%; right:10%; height:1px; background: linear-gradient(90deg, transparent, #2dd4bf, transparent); }
+
+        /* ── Chapter badge colours per chapter ── */
+        #chapter-1 .chapter-badge-pill { background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.3); color: #a5b4fc; }
+        #chapter-2 .chapter-badge-pill { background: rgba(168,85,247,0.15); border-color: rgba(168,85,247,0.3); color: #d8b4fe; }
+        #chapter-3 .chapter-badge-pill { background: rgba(236,72,153,0.15); border-color: rgba(236,72,153,0.3); color: #f9a8d4; }
+        #chapter-4 .chapter-badge-pill { background: rgba(244,114,182,0.15); border-color: rgba(244,114,182,0.3); color: #fbcfe8; }
+        #chapter-5 .chapter-badge-pill { background: rgba(251,113,133,0.15); border-color: rgba(251,113,133,0.3); color: #fecdd3; }
+        #chapter-6 .chapter-badge-pill { background: rgba(45,212,191,0.15); border-color: rgba(45,212,191,0.3); color: #99f6e4; }
+
+        /* ── Section header colour per chapter ── */
+        #chapter-1 h2.section-header::after { background: linear-gradient(90deg, #6366f1, #a855f7); }
+        #chapter-2 h2.section-header::after { background: linear-gradient(90deg, #a855f7, #ec4899); }
+        #chapter-3 h2.section-header::after { background: linear-gradient(90deg, #ec4899, #f97316); }
+        #chapter-4 h2.section-header::after { background: linear-gradient(90deg, #f472b6, #fb7185); }
+        #chapter-5 h2.section-header::after { background: linear-gradient(90deg, #fb7185, #f43f5e); }
+        #chapter-6 h2.section-header::after { background: linear-gradient(90deg, #2dd4bf, #06b6d4); }
+
+        /* ── Closing insight card per chapter ── */
+        #chapter-4 .closing-card { background: linear-gradient(135deg, rgba(244,114,182,0.06), rgba(251,113,133,0.04)); border-color: rgba(244,114,182,0.15); }
+        #chapter-5 .closing-card { background: linear-gradient(135deg, rgba(251,113,133,0.06), rgba(244,63,94,0.04)); border-color: rgba(251,113,133,0.15); }
+        #chapter-6 .closing-card { background: linear-gradient(135deg, rgba(45,212,191,0.06), rgba(6,182,212,0.04)); border-color: rgba(45,212,191,0.15); }
+
+        /* ── Dot nav colours per chapter ── */
+        .ch-dot[data-chapter="chapter-4"].active { background: #f472b6; box-shadow: 0 0 8px rgba(244,114,182,0.8); }
+        .ch-dot[data-chapter="chapter-5"].active { background: #fb7185; box-shadow: 0 0 8px rgba(251,113,133,0.8); }
+        .ch-dot[data-chapter="chapter-6"].active { background: #2dd4bf; box-shadow: 0 0 8px rgba(45,212,191,0.8); }
+
+        /* ── Story block tint per chapter ── */
+        #chapter-4 .story-block { border-left-color: rgba(244,114,182,0.5); background: rgba(244,114,182,0.04); }
+        #chapter-5 .story-block { border-left-color: rgba(251,113,133,0.5); background: rgba(251,113,133,0.04); }
+        #chapter-6 .story-block { border-left-color: rgba(45,212,191,0.5); background: rgba(45,212,191,0.04); }
+
+        /* ── Interaction card hover accent per chapter ── */
+        #chapter-4 .bg-black\/40:hover { border-color: rgba(244,114,182,0.25); }
+        #chapter-5 .bg-black\/40:hover { border-color: rgba(251,113,133,0.25); }
+        #chapter-6 .bg-black\/40:hover { border-color: rgba(45,212,191,0.25); }
+
+        /* ── Quote block tint per chapter ── */
+        #chapter-4 .quote-block { background: linear-gradient(135deg, rgba(244,114,182,0.06), rgba(251,113,133,0.04)); border-color: rgba(244,114,182,0.15); }
+        #chapter-5 .quote-block { background: linear-gradient(135deg, rgba(251,113,133,0.06), rgba(244,63,94,0.04)); border-color: rgba(251,113,133,0.15); }
+        #chapter-6 .quote-block { background: linear-gradient(135deg, rgba(45,212,191,0.06), rgba(6,182,212,0.04)); border-color: rgba(45,212,191,0.15); }
+
+        /* ── Scrollbar styling ── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0a12; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#6366f1, #a855f7);
+            border-radius: 2px;
+        }
+
+        /* ── Mobile responsive tweaks ── */
+        @media (max-width: 640px) {
+            /* Typography */
+            .section-header { font-size: 2rem !important; }
+            .hero-gradient-text { font-size: 3rem !important; }
+            h1.text-7xl, h1[class*="text-7xl"] { font-size: 3rem !important; line-height: 1.1; }
+            .text-8xl { font-size: 4rem !important; }
+
+            /* Nav */
+            #chapter-dots { display: none; }
+            #chapter-audio-label { display: none; }
+
+            /* Cards & spacing */
+            .story-block { padding: 1rem 1.1rem; }
+            .bg-black\/40.rounded-3xl { padding: 1.25rem !important; }
+
+            /* Grids — all collapse to 1 col on mobile */
+            .grid-cols-3 { grid-template-columns: 1fr !important; }
+            .grid-cols-5 { grid-template-columns: 1fr 1fr !important; }
+            .md\:grid-cols-2 { grid-template-columns: 1fr !important; }
+            .md\:grid-cols-3 { grid-template-columns: 1fr !important; }
+            .md\:grid-cols-4 { grid-template-columns: 1fr 1fr !important; }
+
+            /* Hero rings — hide on mobile (too large) */
+            .hero-ring { display: none; }
+
+            /* Chapter max-width full width */
+            .max-w-4xl { padding-left: 1rem; padding-right: 1rem; }
+
+            /* SVG brain maps — scale down */
+            svg { max-width: 100%; height: auto; }
+
+            /* Buttons — larger touch targets */
+            button { min-height: 44px; }
+
+            /* Prose font size */
+            .prose { font-size: 1rem !important; }
+        }
+
+        /* ── Tablet responsive tweaks ── */
+        @media (max-width: 768px) {
+            .section-header { font-size: 2.4rem; }
+            #chapter-dots { display: none; }
+            .md\:grid-cols-3 { grid-template-columns: 1fr 1fr; }
+            .md\:grid-cols-4 { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* ── Touch device improvements ── */
+        @media (hover: none) {
+            /* On touch devices, show hover states differently */
+            .glass-card { border-color: rgba(255,255,255,0.08); }
+            .hover-lift:active { transform: scale(0.98); }
+            .ch-dot .dot-label { display: none; }
+        }
+
+        /* ── Smooth section fade-in on load ── */
+        @keyframes page-fade-in {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        body { animation: page-fade-in 0.8s ease-out forwards; }
+
+        /* ── Audio chapter indicator ── */
+        #chapter-audio-label {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            font-family: monospace;
+            letter-spacing: 0.15em;
+            color: rgba(255,255,255,0.3);
+            pointer-events: none;
+            z-index: 50;
+            transition: color 0.5s ease;
+            white-space: nowrap;
+        }
+        #chapter-audio-label span {
+            color: rgba(99,102,241,0.8);
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a12] text-white neural-bg">
+
+    <!-- Ambient particle layer -->
+    <canvas id="ambient-particles" class="w-full h-full"></canvas>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar"></div>
+
+    <!-- Audio chapter indicator -->
+    <div id="chapter-audio-label">♪ <span id="audio-chapter-name">Neural Hum</span></div>
+
+    <!-- Chapter Dot Navigation -->
+    <nav id="chapter-dots">
+        <div class="ch-dot active" onclick="scrollToChapter('hero')" data-chapter="hero">
+            <span class="dot-label">Start</span>
+        </div>
+        <div class="ch-dot" onclick="scrollToChapter('chapter-1')" data-chapter="chapter-1">
+            <span class="dot-label">Ch 1 · Who Are You?</span>
+        </div>
+        <div class="ch-dot" onclick="scrollToChapter('chapter-2')" data-chapter="chapter-2">
+            <span class="dot-label">Ch 2 · What is Reality?</span>
+        </div>
+        <div class="ch-dot" onclick="scrollToChapter('chapter-3')" data-chapter="chapter-3">
+            <span class="dot-label">Ch 3 · Who's in Control?</span>
+        </div>
+        <div class="ch-dot" onclick="scrollToChapter('chapter-4')" data-chapter="chapter-4">
+            <span class="dot-label">Ch 4 · How Do I Decide?</span>
+        </div>
+        <div class="ch-dot" onclick="scrollToChapter('chapter-5')" data-chapter="chapter-5">
+            <span class="dot-label">Ch 5 · Do I Need You?</span>
+        </div>
+        <div class="ch-dot" onclick="scrollToChapter('chapter-6')" data-chapter="chapter-6">
+            <span class="dot-label">Ch 6 · Who Will We Be?</span>
+        </div>
+    </nav>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-[#0a0a12]/95 backdrop-blur-lg border-b border-white/10 z-50">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                    <i class="fas fa-brain text-white text-xl"></i>
+                </div>
+                <span class="font-display text-2xl font-semibold tracking-tighter">The Brain</span>
+            </div>
+
+            <div class="flex items-center gap-x-2">
+                <!-- Sound Controls -->
+                <div class="flex items-center gap-x-2 bg-white/5 rounded-3xl px-2 py-1.5 border border-white/10 relative">
+                    <button onclick="toggleTrackPanel()" 
+                            class="flex items-center gap-x-2 px-3 py-1.5 rounded-2xl hover:bg-white/10 transition-colors text-sm">
+                        <i class="fas fa-music text-indigo-400"></i>
+                        <span class="hidden sm:inline text-sm font-medium" id="current-theme">Choose Track</span>
+                    </button>
+                    <button onclick="toggleMute()" 
+                            class="w-9 h-9 flex items-center justify-center rounded-2xl hover:bg-white/10 transition-colors"
+                            id="mute-btn">
+                        <i class="fas fa-play text-sm"></i>
+                    </button>
+
+                    <!-- Track Picker Panel -->
+                    <div id="track-panel" class="hidden absolute top-12 right-0 w-72 bg-[#0f0f1a] border border-white/10 rounded-3xl p-4 shadow-2xl z-[200]">
+                        <div class="text-xs font-mono tracking-widest text-white/40 mb-3 px-1">AMBIENT TRACKS</div>
+                        <div id="track-list" class="flex flex-col gap-2">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/10 text-xs text-white/30 leading-relaxed px-1">
+                            Click ▶ to start · M to mute · Tracks loop continuously
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#chapter-1" class="px-5 py-2 text-sm font-medium rounded-2xl hover:bg-white/10 transition-colors">
+                    Begin
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div id="hero" class="pt-20 pb-12 max-w-4xl mx-auto px-6 text-center relative overflow-hidden">
+        <!-- Ambient rings behind hero -->
+        <div class="hero-ring" style="width:500px;height:500px;top:50%;left:50%;margin:-250px 0 0 -250px;animation-delay:0s;"></div>
+        <div class="hero-ring" style="width:700px;height:700px;top:50%;left:50%;margin:-350px 0 0 -350px;animation-delay:1.5s;"></div>
+        <div class="hero-ring" style="width:900px;height:900px;top:50%;left:50%;margin:-450px 0 0 -450px;animation-delay:3s;"></div>
+
+        <div class="inline-flex items-center gap-x-2 bg-white/5 px-4 py-1 rounded-3xl text-sm mb-8 border border-white/10">
+            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+            <span>Based on David Eagleman’s <span class="font-medium">The Brain: The Story of You</span></span>
+        </div>
+        
+        <h1 class="font-display font-bold tracking-tighter leading-none mb-8 hero-gradient-text" style="font-size: clamp(2.5rem, 10vw, 5.75rem)">
+            Your brain is<br>not what you think.
+        </h1>
+        
+        <p class="max-w-xl mx-auto text-2xl text-white/70 mb-12">
+            A quiet journey through the hidden architecture of your mind.
+        </p>
+        
+        <a href="#chapter-1" 
+           class="inline-flex items-center gap-x-3 px-8 py-4 bg-white text-black font-semibold rounded-3xl hover:bg-white/90 transition-all text-lg group">
+            Start the Journey
+            <i class="fas fa-arrow-right group-active:translate-x-1 transition-transform"></i>
+        </a>
+    </div>
+
+    <!-- Chapter 1 -->
+    <div id="chapter-1" class="max-w-4xl mx-auto px-6 pb-12 overflow-x-hidden">
+        
+        <!-- Chapter Header -->
+        <div class="mb-10 chapter-header">
+            <div class="flex items-center gap-x-4 mb-4 neural-glow">
+                <span class="px-4 py-1 text-xs font-mono tracking-[3px] bg-white/10 rounded-2xl chapter-badge-pill">CHAPTER 01</span>
+                <span class="text-xs text-white/50">• WHO ARE YOU?</span>
+            </div>
+            <h2 class="section-header">You are not one.<br>You are many.</h2>
+        </div>
+
+        <!-- Opening Narrative — enriched -->
+        <div class="prose prose-invert max-w-none text-[17px] leading-relaxed text-white/90 mb-16">
+            <p>You wake up every morning feeling like <strong>you</strong> — a single, coherent self with a continuous story. But that feeling is one of the most convincing illusions your brain produces.</p>
+
+            <p class="mt-6">Inside your skull, roughly <strong>86 billion neurons</strong> are firing — forming and dissolving alliances every millisecond. There is no single "you" in there. There is a vast, noisy parliament of competing networks, each with its own agenda, each fighting for control of your next thought, your next word, your next action.</p>
+
+            <div class="story-block mt-8">
+                <p class="text-white/80 italic text-base">"Hold a human brain in your hands and you're holding an entire life — lavishly colored with agonies and ecstasies. Every memory, every fear, every love affair — all of it encoded in this strange, wrinkled, three-pound lump of jelly."</p>
+                <p class="text-sm text-white/40 mt-3 not-italic">— David Eagleman, <em>The Brain: The Story of You</em></p>
+            </div>
+
+            <p class="mt-8">The brain is "livewired" — not hardwired. Unlike a baby zebra that runs within 45 minutes of birth, humans arrive on this planet profoundly unfinished. Our brains spend years being sculpted by every experience we have. The language you grew up speaking, the culture you were raised in, the people who held you or didn't — all of it carved the microscopic architecture of who you are. Neurally speaking, <strong>who you are depends on where you've been.</strong></p>
+
+            <div class="my-10 p-8 border border-white/10 rounded-3xl bg-white/5 text-center">
+                <p class="italic text-xl">"You become who you are not because of what grows in your brain — but because of what is removed."</p>
+                <p class="text-sm text-white/50 mt-4">— David Eagleman</p>
+            </div>
+
+            <p>By age two, a child has over <strong>100 trillion synapses</strong> — double the number an adult has. Then, the great pruning begins. Connections that fire together wire together. Connections that go unused are eliminated. Like a sculptor revealing a statue from marble, your brain removes possibilities to reveal you.</p>
+        </div>
+
+        <!-- Interaction 1: Neural Draw — upgraded with node bursts -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-indigo-400">INTERACTION 01</span>
+                <h3 class="text-3xl font-semibold mt-2">Your Living Network</h3>
+                <p class="text-white/60 mt-2">Move your cursor across the canvas. Watch neurons fire, connect, and form constellations — just like your brain does right now.</p>
+            </div>
+            
+            <div class="bg-black/40 rounded-3xl p-6 border border-white/10">
+                <canvas id="neural-draw" width="800" height="420" class="w-full rounded-2xl cursor-crosshair" style="touch-action:none"></canvas>
+                <div class="flex justify-between items-center mt-4 px-1">
+                    <p class="text-xs text-white/50">Each dot is a neuron. Each line is a synapse firing. Click to clear.</p>
+                    <div id="synapse-counter" class="text-xs font-mono text-indigo-400">0 synapses</div>
+                </div>
+            </div>
+
+            <div class="mt-8 p-6 bg-white/5 border border-white/10 rounded-3xl grid md:grid-cols-4 gap-4 text-sm text-center">
+                <div>
+                    <div class="text-2xl font-bold text-indigo-400">86B</div>
+                    <div class="text-white/50 text-xs mt-1">Neurons in your brain</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-purple-400">100T</div>
+                    <div class="text-white/50 text-xs mt-1">Synaptic connections</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-pink-400">2M</div>
+                    <div class="text-white/50 text-xs mt-1">New synapses/sec in infants</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-amber-400">50%</div>
+                    <div class="text-white/50 text-xs mt-1">Synapses pruned by adulthood</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 2: Split Brain — upgraded with corpus callosum diagram -->
+        <div class="mb-20 elegant-interaction">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-indigo-400">INTERACTION 02</span>
+                <h3 class="text-3xl font-semibold mt-2">Two Brains, One Skull</h3>
+                <p class="text-white/60 mt-2">Your brain has two hemispheres connected by a highway of 250 million nerve fibres called the corpus callosum. Cut it — and two entirely separate minds emerge. Click each hemisphere to see what it knows.</p>
+            </div>
+            
+            <div id="alien-hand-container" class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto">
+                    <!-- Brain diagram -->
+                    <div class="flex justify-center mb-8">
+                        <svg width="100%" height="auto" viewBox="0 0 340 160" style="max-width:340px">
+                            <!-- Left hemisphere -->
+                            <ellipse id="lh-shape" cx="95" cy="80" rx="85" ry="65" fill="#1e1b4b" stroke="#6366f1" stroke-width="2" class="cursor-pointer transition-all duration-300" onclick="selectHemisphere('left')"/>
+                            <!-- Right hemisphere -->
+                            <ellipse id="rh-shape" cx="245" cy="80" rx="85" ry="65" fill="#1a1a2e" stroke="#475569" stroke-width="2" class="cursor-pointer transition-all duration-300" onclick="selectHemisphere('right')"/>
+                            <!-- Corpus callosum bridge -->
+                            <rect id="cc-bridge" x="153" y="60" width="34" height="40" rx="6" fill="#6366f1" opacity="0.7"/>
+                            <!-- Labels -->
+                            <text x="95" y="75" text-anchor="middle" fill="white" font-size="11" font-family="Inter">LEFT</text>
+                            <text x="95" y="92" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Inter">Language · Logic</text>
+                            <text x="245" y="75" text-anchor="middle" fill="white" font-size="11" font-family="Inter">RIGHT</text>
+                            <text x="245" y="92" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Inter">Creativity · Faces</text>
+                            <!-- CC label -->
+                            <text x="170" y="56" text-anchor="middle" fill="#a5b4fc" font-size="7.5" font-family="Inter">corpus</text>
+                            <text x="170" y="66" text-anchor="middle" fill="#a5b4fc" font-size="7.5" font-family="Inter">callosum</text>
+                        </svg>
+                    </div>
+
+                    <!-- Info panel -->
+                    <div id="hemisphere-info" class="text-center text-sm text-white/70 mb-6 min-h-[60px] leading-relaxed">
+                        <span class="text-white/40">↑ Click a hemisphere to explore what it does — and what happens when it's cut off</span>
+                    </div>
+
+                    <!-- Cut the corpus callosum button -->
+                    <div class="text-center mb-6">
+                        <button id="cut-cc-btn" onclick="cutCorpusCallosum()" class="px-6 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 rounded-2xl text-sm text-red-300 transition-colors">
+                            ✂️ Cut the Corpus Callosum
+                        </button>
+                        <p id="cc-status" class="text-xs text-white/40 mt-2">This is what surgeons once did to treat severe epilepsy.</p>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-white/10 grid md:grid-cols-2 gap-4 text-xs text-white/60">
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <div class="font-medium text-white/80 mb-1">Alien Hand Syndrome</div>
+                            After the cut, patients' hands sometimes fight each other — one buttoning a shirt while the other unbuttons it. Two minds, one body.
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <div class="font-medium text-white/80 mb-1">The Interpreter</div>
+                            The left hemisphere constantly invents explanations for what the right hemisphere does — even when it has no idea why. Your inner narrator is a storyteller, not a reporter.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 3: Reaction Time — Libet-style "Who decided?" test -->
+        <div class="mb-16">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-indigo-400">INTERACTION 03</span>
+                <h3 class="text-3xl font-semibold mt-2">Who Actually Decided?</h3>
+                <p class="text-white/60 mt-2">Benjamin Libet's landmark experiment showed your brain prepares a movement <strong>up to 500ms before</strong> you consciously decide to make it. Try it yourself — then see the truth.</p>
+            </div>
+            
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-lg mx-auto text-center">
+                    <!-- Instructions -->
+                    <div id="libet-instructions" class="mb-6">
+                        <p class="text-white/70 text-sm mb-4">When the button turns <span class="text-emerald-400 font-medium">green</span>, press it as fast as you can. Your reaction time will reveal how much of "you" is actually running on autopilot.</p>
+                    </div>
+
+                    <!-- The test button -->
+                    <div class="mb-8">
+                        <button id="libet-btn"
+                            onclick="handleLibetClick()"
+                            class="w-36 h-36 rounded-full border-4 border-white/20 bg-white/5 text-white/40 text-sm font-medium transition-all duration-200 hover:border-white/30 mx-auto flex items-center justify-center">
+                            <span id="libet-btn-label">Press to Start</span>
+                        </button>
+                    </div>
+
+                    <!-- Result -->
+                    <div id="libet-result" class="hidden">
+                        <div class="text-4xl font-bold mb-2" id="libet-time"></div>
+                        <div class="text-white/60 text-sm mb-4" id="libet-verdict"></div>
+                        <div class="p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl text-xs text-white/60 text-left">
+                            <strong class="text-indigo-400">The Libet Experiment:</strong> In 1983, Benjamin Libet measured brain activity during voluntary movements. He found a "readiness potential" — a spike of neural activity — began <strong>300–500ms before</strong> subjects reported making a conscious decision to move. Your brain acts before "you" do. The feeling of deciding may be constructed after the fact.
+                        </div>
+                        <button onclick="resetLibet()" class="mt-4 px-5 py-2 bg-white/10 hover:bg-white/20 rounded-2xl text-sm transition-colors">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Closing Insight -->
+        <div class="mt-20 p-10 border border-white/10 rounded-3xl bg-white/5 text-center">
+            <div class="max-w-md mx-auto">
+                <p class="text-xl leading-tight">You are not a single self.<br>You are a team of rivals — and none of them is fully in charge.</p>
+                <p class="mt-6 text-sm text-white/60">The question is not "Who am I?"<br>The question is "Which part of me is speaking right now — and who voted for it?"</p>
+            </div>
+        </div>
+
+        <!-- Bridge to Chapter 2 -->
+        <div class="chapter-bridge scroll-reveal mt-6">
+            <div class="w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent mx-auto mb-8"></div>
+            <p class="text-white/40 text-sm uppercase tracking-widest mb-3">Next</p>
+            <p class="text-white/70 text-lg">If you can't trust your own sense of self… can you trust your senses at all?</p>
+            <a href="#chapter-2" class="inline-flex items-center gap-2 mt-6 text-indigo-400 text-sm hover:text-indigo-300 transition-colors">
+                Continue to Chapter 2 <i class="fas fa-arrow-down text-xs"></i>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 2: What is Reality? -->
+    <!-- ============================================ -->
+    <div id="chapter-2" class="max-w-4xl mx-auto px-6 pb-12 overflow-x-hidden border-t border-white/10 pt-10">
+        
+        <!-- Chapter Header -->
+        <div class="mb-10 chapter-header">
+            <div class="flex items-center gap-x-4 mb-4 neural-glow">
+                <span class="px-4 py-1 text-xs font-mono tracking-[3px] bg-white/10 rounded-2xl chapter-badge-pill">CHAPTER 02</span>
+                <span class="text-xs text-purple-400/70">• WHAT IS REALITY?</span>
+            </div>
+            <h2 class="section-header">Your brain does not<br>receive reality.<br>It constructs it.</h2>
+        </div>
+
+        <!-- Opening Narrative — enriched -->
+        <div class="prose prose-invert max-w-none text-[17px] leading-relaxed text-white/90 mb-16">
+            <p>Right now, your brain is sealed inside a silent, dark chamber — your skull. It has never seen light, heard sound, or touched anything. It never will. All it ever receives are electrical signals, and from those signals it constructs the vivid, colourful, smelling, sounding world you believe you inhabit.</p>
+
+            <p class="mt-6">When Mike May lost his sight at age three, a chemical explosion scarred his corneas. After 43 years of blindness, a corneal transplant restored his sight. But something unexpected happened when the bandages came off:</p>
+
+            <div class="story-block mt-6">
+                <p class="text-white/80 italic text-base">"There's this whoosh of light and bombarding of images onto my eye. All of a sudden you turn on this flood of visual information. It's overwhelming."</p>
+                <p class="text-sm text-white/40 mt-3 not-italic">— Mike May, on regaining sight after 43 years</p>
+            </div>
+
+            <p class="mt-8">His eyes were working perfectly. But he couldn't see. He couldn't recognise his own children's faces. He couldn't tell a person from a tree. In the car home, he recoiled in terror from a highway sign — he had no sense of depth at all. <strong>Seeing is not a function of the eyes. It is a construction of the brain.</strong></p>
+
+            <p class="mt-6">Here is the strangest truth: the world outside your head is colourless, odourless, soundless. There is no colour "red" out there — only electromagnetic radiation at 700 nanometres. Your brain translates that into the experience of red. The world is silent — there are only pressure waves in air. Your brain turns those into music. Reality, as you experience it, exists nowhere in the universe except inside your skull.</p>
+
+            <div class="my-10 p-8 border border-white/10 rounded-3xl bg-white/5 text-center">
+                <p class="italic text-xl">"If you could perceive reality as it truly is, you would be shocked by its colourless, odourless, tasteless silence."</p>
+                <p class="text-sm text-white/50 mt-4">— David Eagleman</p>
+            </div>
+
+            <p>And it gets stranger. Your brain doesn't passively receive signals — it <em>predicts</em> them. There are <strong>10× more connections</strong> going from your brain back down to your sensory organs than going the other way. You are mostly seeing what you expect to see, not what is there. Reality is a controlled hallucination.</p>
+        </div>
+
+        <!-- Interaction 1: Umwelt Explorer — upgraded with visual overlays -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-indigo-400">INTERACTION 01</span>
+                <h3 class="text-3xl font-semibold mt-2">Your Slice of Reality</h3>
+                <p class="text-white/60 mt-2">Every creature lives in its own perceptual bubble — its <em>Umwelt</em>. Slide to inhabit a different one. Notice how radically reality changes.</p>
+            </div>
+            
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex justify-between text-xs text-white/50 mb-3 px-1">
+                        <span>Human</span><span>Bat</span><span>Dog</span><span>Snake</span><span>Electric Fish</span>
+                    </div>
+                    <input type="range" id="umwelt-slider" min="0" max="100" value="0" step="1"
+                           class="w-full accent-indigo-500" oninput="updateUmwelt(this.value)">
+
+                    <!-- Visual overlay box -->
+                    <div id="umwelt-overlay" class="mt-8 rounded-2xl overflow-hidden relative" style="height:180px; background:#0a0a18;">
+                        <div id="umwelt-visual" class="w-full h-full flex items-center justify-center transition-all duration-500">
+                            <div class="text-6xl" id="umwelt-emoji">👁️</div>
+                        </div>
+                        <div id="umwelt-filter-layer" class="absolute inset-0 pointer-events-none transition-all duration-500"></div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <div id="umwelt-label" class="text-xl font-semibold mb-2">Human Reality</div>
+                        <div id="umwelt-description" class="text-sm text-white/70 max-w-md mx-auto leading-relaxed">
+                            You see a narrow band of the electromagnetic spectrum called "visible light." You are blind to 99.9999999999% of it — including the radio waves, microwaves, and X-rays passing through your body right now.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 2: Synesthesia — see letters as colours -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-indigo-400">INTERACTION 02</span>
+                <h3 class="text-3xl font-semibold mt-2">What Colour is the Letter A?</h3>
+                <p class="text-white/60 mt-2">For about 3% of people, letters have colours — automatically, involuntarily, and permanently. This is synesthesia: proof that reality is not fixed. Toggle between normal and a synesthete's view.</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto">
+                    <!-- Toggle -->
+                    <div class="flex justify-center mb-8">
+                        <div class="flex bg-white/5 rounded-2xl p-1 border border-white/10">
+                            <button id="syn-off-btn" onclick="setSynMode(false)" class="px-5 py-2 rounded-xl text-sm font-medium transition-all bg-white/10 text-white">Normal vision</button>
+                            <button id="syn-on-btn" onclick="setSynMode(true)" class="px-5 py-2 rounded-xl text-sm text-white/50 transition-all">Synesthete view</button>
+                        </div>
+                    </div>
+
+                    <!-- Letters -->
+                    <div id="syn-letters" class="flex flex-wrap justify-center gap-2 mb-6">
+                    </div>
+
+                    <div id="syn-description" class="text-center text-sm text-white/60 leading-relaxed max-w-sm mx-auto">
+                        In normal vision, letters are just shapes. They carry no colour information.
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-white/10 grid md:grid-cols-2 gap-4 text-xs text-white/60">
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <div class="font-medium text-white/80 mb-1">David Eagleman's research</div>
+                            He studied over 6,000 synesthetes. For each person, the colour-letter pairings are consistent — A is always red, B is always blue — and never change throughout their lifetime.
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <div class="font-medium text-white/80 mb-1">What it proves</div>
+                            Synesthesia shows that microscopic differences in brain wiring create measurably different realities. There is no single "objective" experience of the world — only the one your brain generates.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 3: Time Perception — upgraded with Eagleman's free-fall experiment -->
+        <div class="mb-16">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-indigo-400">INTERACTION 03</span>
+                <h3 class="text-3xl font-semibold mt-2">Does Time Really Slow Down?</h3>
+                <p class="text-white/60 mt-2">People who survive accidents often report that time slowed to a crawl. Eagleman dropped volunteers from a 150-foot tower to test this. The answer was surprising. First — try the test yourself.</p>
+            </div>
+            
+            <div id="time-warp-container" class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-lg mx-auto">
+                    <!-- Number flash test -->
+                    <div class="text-center mb-8">
+                        <p class="text-white/60 text-sm mb-6">A number will flash briefly. Try to read it. If time really slowed for you under stress, you could read faster numbers. Let's see.</p>
+                        <div id="twarp-number" class="font-bold mb-6 min-h-[80px] flex items-center justify-center text-white/10" style="font-size: clamp(3rem, 15vw, 6rem)">?</div>
+                        <button id="twarp-btn" onclick="startTimeWarpTest()" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-2xl text-sm transition-colors">Start Test</button>
+                    </div>
+
+                    <!-- Result explanation -->
+                    <div id="twarp-result" class="hidden">
+                        <div class="p-6 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl text-sm text-white/70 leading-relaxed">
+                            <p class="font-medium text-white mb-2">The Eagleman Free-Fall Experiment</p>
+                            <p>Eagleman dropped 23 volunteers — including himself — backwards off a 150-foot platform. Each wore a "perceptual chronometer" on their wrist flashing numbers too fast to read at normal speed.</p>
+                            <p class="mt-3">Result: <strong class="text-indigo-400">Nobody could read the numbers.</strong> Time doesn't actually slow down. Instead, the brain's amygdala encodes frightening moments with far richer detail than normal — so when you replay the memory, it feels longer. The slow-motion effect is a <em>trick of memory, not perception.</em></p>
+                        </div>
+                        <button onclick="resetTimeWarpTest()" class="mt-4 px-5 py-2 bg-white/10 hover:bg-white/20 rounded-2xl text-sm transition-colors">Try Again</button>
+                    </div>
+
+                    <div class="mt-8 grid grid-cols-3 gap-3 text-center text-xs">
+                        <div class="bg-white/5 rounded-2xl p-3">
+                            <div class="font-medium text-amber-400 mb-1">Car crash</div>
+                            <div class="text-white/50">Feels like slow motion — but isn't</div>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-3">
+                            <div class="font-medium text-emerald-400 mb-1">Flow state</div>
+                            <div class="text-white/50">Time disappears entirely</div>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-3">
+                            <div class="font-medium text-indigo-400 mb-1">Boredom</div>
+                            <div class="text-white/50">Every second feels like ten</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Closing Insight -->
+        <div class="mt-16 p-10 border border-white/10 rounded-3xl bg-white/5 text-center">
+            <div class="max-w-md mx-auto">
+                <p class="text-xl leading-tight">You are not seeing reality.<br>You are seeing a story your brain is telling you.</p>
+                <p class="mt-6 text-sm text-white/60">The question is no longer "What is real?"<br>The question is "Whose reality am I living in right now?"</p>
+            </div>
+        </div>
+
+        <!-- Bridge to Chapter 3 -->
+        <div class="chapter-bridge scroll-reveal mt-6">
+            <div class="w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent mx-auto mb-8"></div>
+            <p class="text-white/40 text-sm uppercase tracking-widest mb-3">Next</p>
+            <p class="text-white/70 text-lg">If your brain constructs reality… who is actually steering the ship?</p>
+            <a href="#chapter-3" class="inline-flex items-center gap-2 mt-6 text-indigo-400 text-sm hover:text-indigo-300 transition-colors">
+                Continue to Chapter 3 <i class="fas fa-arrow-down text-xs"></i>
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        // ── Progress Bar + Chapter Dot Nav ──────────────────────────────
+        function initProgressAndNav() {
+            const bar   = document.getElementById('progress-bar');
+            const dots  = document.querySelectorAll('.ch-dot');
+            const sections = ['hero','chapter-1','chapter-2','chapter-3','chapter-4','chapter-5','chapter-6'];
+
+            function update() {
+                const scrollTop    = window.scrollY;
+                const docHeight    = document.documentElement.scrollHeight - window.innerHeight;
+                const pct          = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                bar.style.width    = pct + '%';
+
+                // Determine active section
+                let active = 'hero';
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) active = id;
+                });
+                dots.forEach(d => {
+                    d.classList.toggle('active', d.dataset.chapter === active);
+                });
+            }
+            window.addEventListener('scroll', update, { passive: true });
+            update();
+        }
+
+        function scrollToChapter(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ── Ambient Floating Particles ────────────────────────────────────
+        function initAmbientParticles() {
+            const canvas = document.getElementById('ambient-particles');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let W = canvas.width  = window.innerWidth;
+            let H = canvas.height = window.innerHeight;
+            window.addEventListener('resize', () => {
+                W = canvas.width  = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            });
+
+            const particles = Array.from({length: 60}, () => ({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                r: 0.5 + Math.random() * 1.5,
+                vx: (Math.random() - 0.5) * 0.18,
+                vy: -0.08 - Math.random() * 0.12,
+                hue: 220 + Math.random() * 60,
+                life: Math.random(),
+                maxLife: 0.4 + Math.random() * 0.6,
+            }));
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.life += 0.003;
+                    if (p.life > p.maxLife || p.y < 0) {
+                        p.x = Math.random() * W;
+                        p.y = H + 5;
+                        p.life = 0;
+                    }
+                    const alpha = Math.sin((p.life / p.maxLife) * Math.PI) * 0.7;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${p.hue},80%,75%,${alpha})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // AUDIO SYSTEM v2 — File-based track picker
+        // Tracks are loaded from audio/ directory.
+        // AudioContext / Audio element created only after user gesture.
+        // ══════════════════════════════════════════════════════════════════
+
+        // ── Track definitions ────────────────────────────────────────────
+        // Add or edit tracks here. Put your MP3s in an audio/ folder.
+        const TRACKS = [
+            { id: 'neural-hum',    name: 'Neural Hum',     file: 'audio/neural-hum.mp3',    desc: 'Deep, meditative drone',       color: '#818cf8' },
+            { id: 'cosmic-drift',  name: 'Cosmic Drift',   file: 'audio/cosmic-drift.mp3',   desc: 'Ambient space textures',       color: '#c084fc' },
+            { id: 'deep-pulse',    name: 'Deep Pulse',     file: 'audio/deep-pulse.mp3',     desc: 'Slow rhythmic undercurrent',   color: '#f472b6' },
+            { id: 'ocean-mind',    name: 'Ocean Mind',     file: 'audio/ocean-mind.mp3',     desc: 'Gentle waves & tones',         color: '#2dd4bf' },
+            { id: 'synth-brain',   name: 'Synth Brain',    file: 'audio/synth-brain.mp3',    desc: 'Electronic neural patterns',   color: '#fb7185' },
+        ];
+
+        // Chapter → preferred track (by track id)
+        const chapterTrackMap = {
+            'hero':      'neural-hum',
+            'chapter-1': 'neural-hum',
+            'chapter-2': 'cosmic-drift',
+            'chapter-3': 'deep-pulse',
+            'chapter-4': 'deep-pulse',
+            'chapter-5': 'ocean-mind',
+            'chapter-6': 'synth-brain',
+        };
+
+        let currentAudio    = null;   // active HTMLAudioElement
+        let currentTrackId  = null;
+        let isMuted         = false;
+        let audioStarted    = false;
+        let userChoseTrack  = false;  // true if user manually picked a track
+        let lastChapter     = null;
+
+        // ── Track panel toggle ───────────────────────────────────────────
+        function toggleTrackPanel() {
+            const panel = document.getElementById('track-panel');
+            if (!panel) return;
+            const isOpen = !panel.classList.contains('hidden');
+            panel.classList.toggle('hidden');
+            if (!isOpen) buildTrackList();
+        }
+
+        function buildTrackList() {
+            const list = document.getElementById('track-list');
+            if (!list) return;
+            list.innerHTML = TRACKS.map(t => `
+                <button onclick="selectTrack('${t.id}')"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-all text-left w-full ${currentTrackId === t.id ? 'bg-white/10 border border-white/20' : 'hover:bg-white/5 border border-transparent'}"
+                    style="${currentTrackId === t.id ? `border-color:${t.color}40` : ''}">
+                    <div class="w-2 h-2 rounded-full flex-shrink-0 ${currentTrackId === t.id ? '' : 'opacity-30'}" style="background:${t.color};box-shadow:${currentTrackId === t.id ? `0 0 6px ${t.color}` : 'none'}"></div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium text-white/90 truncate">${t.name}</div>
+                        <div class="text-xs text-white/40 truncate">${t.desc}</div>
+                    </div>
+                    ${currentTrackId === t.id && !isMuted ? '<i class="fas fa-volume-up text-xs" style="color:'+t.color+'"></i>' : ''}
+                </button>
+            `).join('');
+        }
+
+        function selectTrack(trackId) {
+            userChoseTrack = true;
+            playTrack(trackId);
+            toggleTrackPanel();
+        }
+
+        // ── Playback ─────────────────────────────────────────────────────
+        function playTrack(trackId) {
+            const track = TRACKS.find(t => t.id === trackId);
+            if (!track) return;
+
+            // Fade out current
+            if (currentAudio) {
+                fadeOut(currentAudio);
+                currentAudio = null;
+            }
+
+            if (isMuted) {
+                currentTrackId = trackId;
+                updateAudioBtn(track);
+                return;
+            }
+
+            const audio = new Audio(track.file);
+            audio.loop   = true;
+            audio.volume = 0;
+            currentAudio   = audio;
+            currentTrackId = trackId;
+            audioStarted   = true;
+
+            audio.play().then(() => {
+                fadeIn(audio);
+                updateAudioBtn(track);
+                const label = document.getElementById('audio-chapter-name');
+                if (label) { label.textContent = track.name; label.style.color = track.color; }
+                const themeEl = document.getElementById('current-theme');
+                if (themeEl) themeEl.textContent = track.name;
+            }).catch(err => {
+                console.warn('[Audio] Could not play:', track.file, err);
+                // File not found — show friendly message
+                const themeEl = document.getElementById('current-theme');
+                if (themeEl) themeEl.textContent = 'Add audio/ files';
+            });
+        }
+
+        function fadeIn(audio, targetVol = 0.28, duration = 1500) {
+            const step = targetVol / (duration / 50);
+            const interval = setInterval(() => {
+                if (!audio || audio.paused) { clearInterval(interval); return; }
+                audio.volume = Math.min(targetVol, audio.volume + step);
+                if (audio.volume >= targetVol) clearInterval(interval);
+            }, 50);
+        }
+
+        function fadeOut(audio, duration = 800) {
+            if (!audio) return;
+            const startVol = audio.volume;
+            const step = startVol / (duration / 50);
+            const interval = setInterval(() => {
+                audio.volume = Math.max(0, audio.volume - step);
+                if (audio.volume <= 0) { audio.pause(); clearInterval(interval); }
+            }, 50);
+        }
+
+        function toggleMute() {
+            if (!audioStarted && !isMuted) {
+                // First click — start with default track
+                isMuted = false;
+                playTrack(currentTrackId || 'neural-hum');
+                return;
+            }
+            isMuted = !isMuted;
+            if (isMuted) {
+                if (currentAudio) fadeOut(currentAudio);
+            } else if (currentTrackId) {
+                playTrack(currentTrackId);
+            }
+            const track = TRACKS.find(t => t.id === currentTrackId);
+            updateAudioBtn(track);
+        }
+
+        function updateAudioBtn(track) {
+            const btn = document.getElementById('mute-btn');
+            if (!btn) return;
+            if (!audioStarted) {
+                btn.innerHTML = '<i class="fas fa-play text-sm"></i>';
+                btn.title = 'Start audio';
+            } else if (isMuted) {
+                btn.innerHTML = '<i class="fas fa-volume-mute text-lg text-red-400"></i>';
+                btn.title = 'Unmute';
+            } else {
+                const color = track ? track.color : '#818cf8';
+                btn.innerHTML = `<i class="fas fa-volume-up text-lg" style="color:${color}"></i>`;
+                btn.title = 'Mute';
+            }
+        }
+
+        // ── Chapter-aware auto-switching ──────────────────────────────────
+        function initChapterAudio() {
+            const sections = ['hero','chapter-1','chapter-2','chapter-3','chapter-4','chapter-5','chapter-6'];
+            window.addEventListener('scroll', () => {
+                if (!audioStarted || isMuted || userChoseTrack) return;
+                let active = 'hero';
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) active = id;
+                });
+                if (active !== lastChapter) {
+                    lastChapter = active;
+                    const preferred = chapterTrackMap[active];
+                    if (preferred && preferred !== currentTrackId) playTrack(preferred);
+                }
+            }, { passive: true });
+        }
+
+        async function initSound() {
+            updateAudioBtn(null);
+            const themeEl = document.getElementById('current-theme');
+            if (themeEl) themeEl.textContent = 'Choose Track';
+        }
+
+        function loadPreferences() {
+            const saved = localStorage.getItem('brainTrackId');
+            if (saved && TRACKS.find(t => t.id === saved)) {
+                currentTrackId = saved;
+            }
+        }
+
+        function initKeyboard() {
+            document.addEventListener('keydown', e => {
+                if (e.key.toLowerCase() === 'm') toggleMute();
+                if (e.key === 'Escape') {
+                    const panel = document.getElementById('track-panel');
+                    if (panel && !panel.classList.contains('hidden')) panel.classList.add('hidden');
+                }
+            });
+            // Close panel on outside click
+            document.addEventListener('click', e => {
+                const panel = document.getElementById('track-panel');
+                if (!panel || panel.classList.contains('hidden')) return;
+                if (!panel.contains(e.target) && !e.target.closest('[onclick="toggleTrackPanel()"]')) {
+                    panel.classList.add('hidden');
+                }
+            });
+        }
+
+        // Legacy stubs
+        function showSoundThemeModal() { toggleTrackPanel(); }
+        function hideSoundThemeModal() { const p = document.getElementById('track-panel'); if(p) p.classList.add('hidden'); }
+        function selectTheme(t) { selectTrack(t); }
+
+                // ── Neural Draw Canvas ────────────────────────────────────────────
+        function initNeuralDraw() {
+            const canvas = document.getElementById('neural-draw');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width, H = canvas.height;
+
+            let neurons = [];
+            let synapseCount = 0;
+            const MAX_NEURONS = 120;
+            const CONNECTION_RADIUS = 130;
+
+            // Fill with dark background
+            ctx.fillStyle = '#060612';
+            ctx.fillRect(0, 0, W, H);
+
+            // Draw hint text
+            ctx.fillStyle = 'rgba(100,116,139,0.6)';
+            ctx.font = '15px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Move your cursor here to grow neurons', W / 2, H / 2 - 10);
+            ctx.fillText('Click to clear', W / 2, H / 2 + 16);
+            ctx.textAlign = 'left';
+
+            function getCanvasPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = W / rect.width;
+                const scaleY = H / rect.height;
+                return {
+                    x: (e.clientX - rect.left) * scaleX,
+                    y: (e.clientY - rect.top)  * scaleY
+                };
+            }
+
+            function spawnNeuron(x, y) {
+                // Add slight jitter so neurons don't all stack
+                const jx = x + (Math.random() - 0.5) * 24;
+                const jy = y + (Math.random() - 0.5) * 24;
+                if (neurons.length >= MAX_NEURONS) neurons.shift();
+                neurons.push({
+                    x: jx, y: jy,
+                    r: 3 + Math.random() * 3,
+                    life: 1.0,
+                    color: `hsl(${210 + Math.random() * 120}, 80%, 65%)`
+                });
+            }
+
+            function redraw() {
+                // Fade background
+                ctx.fillStyle = 'rgba(6,6,18,0.18)';
+                ctx.fillRect(0, 0, W, H);
+
+                synapseCount = 0;
+
+                // Draw connections first
+                for (let i = 0; i < neurons.length; i++) {
+                    for (let j = i + 1; j < neurons.length; j++) {
+                        const dx = neurons[i].x - neurons[j].x;
+                        const dy = neurons[i].y - neurons[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < CONNECTION_RADIUS) {
+                            const alpha = (1 - dist / CONNECTION_RADIUS) * 0.5 * neurons[i].life * neurons[j].life;
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(99,102,241,${alpha})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.moveTo(neurons[i].x, neurons[i].y);
+                            ctx.lineTo(neurons[j].x, neurons[j].y);
+                            ctx.stroke();
+                            synapseCount++;
+                        }
+                    }
+                }
+
+                // Draw neurons
+                neurons.forEach((n, idx) => {
+                    // Decay life slowly
+                    n.life = Math.max(0, n.life - 0.003);
+
+                    // Glow
+                    const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4);
+                    grd.addColorStop(0, `rgba(129,140,248,${0.35 * n.life})`);
+                    grd.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, n.r * 4, 0, Math.PI * 2);
+                    ctx.fillStyle = grd;
+                    ctx.fill();
+
+                    // Core dot
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+                    ctx.fillStyle = n.color;
+                    ctx.globalAlpha = n.life;
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                });
+
+                // Remove dead neurons
+                neurons = neurons.filter(n => n.life > 0.05);
+
+                // Update counter
+                const counter = document.getElementById('synapse-counter');
+                if (counter) counter.textContent = `${synapseCount} synapse${synapseCount !== 1 ? 's' : ''}`;
+
+                requestAnimationFrame(redraw);
+            }
+
+            let throttle = 0;
+            canvas.addEventListener('mousemove', (e) => {
+                const now = Date.now();
+                if (now - throttle < 30) return; // ~33fps spawn rate
+                throttle = now;
+                const pos = getCanvasPos(e);
+                spawnNeuron(pos.x, pos.y);
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const now = Date.now();
+                if (now - throttle < 30) return;
+                throttle = now;
+                const pos = getCanvasPos(e.touches[0]);
+                spawnNeuron(pos.x, pos.y);
+            }, { passive: false });
+
+            canvas.addEventListener('click', () => {
+                neurons = [];
+                synapseCount = 0;
+                ctx.fillStyle = '#060612';
+                ctx.fillRect(0, 0, W, H);
+                ctx.fillStyle = 'rgba(100,116,139,0.6)';
+                ctx.font = '15px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Move your cursor here to grow neurons', W / 2, H / 2 - 10);
+                ctx.fillText('Click to clear', W / 2, H / 2 + 16);
+                ctx.textAlign = 'left';
+                const counter = document.getElementById('synapse-counter');
+                if (counter) counter.textContent = '0 synapses';
+            });
+
+            redraw();
+        }
+
+        // Initialize everything
+        async function init() {
+            await initSound();
+            initProgressAndNav();
+            initAmbientParticles();
+            initChapterAudio();
+            initNeuralDraw();
+            initAlienHand();
+            initScrollReveal();
+            loadPreferences();
+            initKeyboard();
+            initChapterTransitions();
+
+            // Chapter 2
+            initPredictionCanvas();
+            initTimeWarp();
+            initSynesthesia();
+
+            // Chapter 3
+            initAutopilot();
+            initControlVisual();
+
+            console.log('%c[The Brain] All chapters initialized ✓ — Visual polish + chapter audio active', 'color:#6366f1;font-weight:bold');
+        }
+
+        window.onload = init;
+    </script>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 3: Who's in Control? -->
+    <!-- ============================================ -->
+    <div id="chapter-3" class="max-w-4xl mx-auto px-6 pb-12 overflow-x-hidden border-t border-white/10 pt-10">
+        
+        <!-- Chapter Header -->
+        <div class="mb-10 chapter-header">
+            <div class="flex items-center gap-x-4 mb-4 neural-glow">
+                <span class="px-4 py-1 text-xs font-mono tracking-[3px] bg-white/10 rounded-2xl chapter-badge-pill">CHAPTER 03</span>
+                <span class="text-xs text-pink-400/70">• WHO'S IN CONTROL?</span>
+            </div>
+            <h2 class="section-header">You are not<br>the one in charge.</h2>
+        </div>
+
+        <!-- Opening Narrative — enriched -->
+        <div class="prose prose-invert max-w-none text-[17px] leading-relaxed text-white/90 mb-16">
+            <p>On August 1st, 1966, Charles Whitman climbed to the top of a tower at the University of Texas and opened fire, killing 14 people on the campus. He had been an Eagle Scout, a model Marine, a dutiful son. The night before, he wrote a note:</p>
+
+            <div class="story-block mt-6">
+                <p class="text-white/80 italic text-base">"I do not really understand myself these days. I am supposed to be an average, reasonable and intelligent young man. However, lately I cannot rationalize even to myself certain events in my life."</p>
+                <p class="text-sm text-white/40 mt-3 not-italic">— Charles Whitman, the night before his rampage</p>
+            </div>
+
+            <p class="mt-8">The autopsy found a tumour — a glioblastoma pressing directly on his amygdala, the brain's alarm and aggression centre. A piece of biology had overridden the "him" he knew. This raises the most uncomfortable question in neuroscience: <strong>if your behaviour can be so completely altered by a small change in brain tissue, in what sense are you ever truly in control?</strong></p>
+
+            <p class="mt-6">The uncomfortable answer: most of what you do is generated by unconscious systems — and your conscious mind claims credit a fraction of a second later. You are not the author of your actions. You are the narrator who retroactively writes the story.</p>
+
+            <div class="my-10 p-8 border border-white/10 rounded-3xl bg-white/5 text-center">
+                <p class="italic text-xl">"Who you are is intimately tied to the particular arrangement of atoms sitting inside your skull. Change the brain, change the person."</p>
+                <p class="text-sm text-white/50 mt-4">— David Eagleman</p>
+            </div>
+
+            <p>Ian Waterman was a young man who, after a stomach illness in 1971, permanently lost all proprioception — the unconscious sense of where his body is in space. He relearned to walk, but only with his eyes open, watching every step. In the dark, he collapses instantly. His unconscious brain can never do what yours does automatically, right now, without a single conscious thought.</p>
+        </div>
+
+        <!-- Interaction 1: Feel Your Unconscious Brain -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-indigo-400">INTERACTION 01</span>
+                <h3 class="text-3xl font-semibold mt-2">Feel Your Unconscious Brain</h3>
+                <p class="text-white/60 mt-2">Your brain tracks the position of every limb, finger, and joint — without you doing a thing. This is proprioception. Let's make it visible.</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex justify-center mb-8">
+                        <svg id="body-figure" width="192" height="192" viewBox="0 0 192 192" class="mx-auto transition-all duration-500">
+                            <circle cx="96" cy="40" r="18" fill="#64748b" stroke="#475569" stroke-width="3"/>
+                            <rect x="78" y="58" width="36" height="60" rx="8" fill="#64748b" stroke="#475569" stroke-width="3"/>
+                            <line id="left-arm" x1="78" y1="70" x2="45" y2="95" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
+                            <line id="right-arm" x1="114" y1="70" x2="147" y2="95" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
+                            <line x1="85" y1="118" x2="70" y2="160" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
+                            <line x1="107" y1="118" x2="122" y2="160" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <div class="space-y-3 mb-8 text-sm">
+                        <div class="scroll-reveal bg-white/5 rounded-2xl p-4 flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-mono text-xs flex-shrink-0">1</div>
+                            <div>Close your eyes and touch your nose with your right index finger.</div>
+                        </div>
+                        <div class="scroll-reveal bg-white/5 rounded-2xl p-4 flex items-center gap-4" style="transition-delay:100ms">
+                            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-mono text-xs flex-shrink-0">2</div>
+                            <div>You did it effortlessly. Your brain tracked every joint angle, every muscle tension — automatically, without asking you.</div>
+                        </div>
+                        <div class="scroll-reveal bg-white/5 rounded-2xl p-4 flex items-center gap-4" style="transition-delay:200ms">
+                            <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 font-mono text-xs flex-shrink-0">!</div>
+                            <div>Ian Waterman <em>cannot</em> do this. Without proprioception, his arm has no idea where it is unless he watches it.</div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button onclick="simulateProprioceptionLoss(this)" class="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-2xl text-sm transition-colors">
+                            <span id="proprio-btn-text">Simulate Proprioception Loss</span>
+                        </button>
+                        <p class="text-xs text-white/50 mt-2">Watch the figure lose control of its body</p>
+                    </div>
+
+                    <div class="mt-8 grid md:grid-cols-2 gap-4 text-xs text-white/60">
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <div class="font-medium text-white/80 mb-1">Ian Waterman (1971)</div>
+                            A rare virus destroyed his proprioceptive nerve fibres below the neck. He relearned to walk — but only with his eyes open, watching his every step.
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <div class="font-medium text-white/80 mb-1">What this tells us</div>
+                            The unconscious brain handles thousands of movement calculations per second. Your conscious mind couldn't do this even if it tried — it's simply too slow.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 2: Brain Autopilot — interactive region activity meter -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-indigo-400">INTERACTION 02</span>
+                <h3 class="text-3xl font-semibold mt-2">Your Brain on Autopilot</h3>
+                <p class="text-white/60 mt-2">As a skill becomes automatic, activity shifts from the prefrontal cortex (conscious thought) to the basal ganglia (habit circuits). Drag the slider to watch the brain hand the wheel over.</p>
+            </div>
+
+            <div id="autopilot-container" class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex flex-wrap justify-center gap-2 mb-8">
+                        <button onclick="setAutopilotSkill('typing')" class="autopilot-skill-btn px-4 py-2 rounded-2xl text-xs border border-white/20 bg-white/5 hover:bg-white/10 transition-colors" data-skill="typing">⌨️ Typing</button>
+                        <button onclick="setAutopilotSkill('driving')" class="autopilot-skill-btn px-4 py-2 rounded-2xl text-xs border border-white/20 bg-white/5 hover:bg-white/10 transition-colors" data-skill="driving">🚗 Driving</button>
+                        <button onclick="setAutopilotSkill('music')" class="autopilot-skill-btn px-4 py-2 rounded-2xl text-xs border border-white/20 bg-white/5 hover:bg-white/10 transition-colors" data-skill="music">🎸 Playing music</button>
+                        <button onclick="setAutopilotSkill('walking')" class="autopilot-skill-btn px-4 py-2 rounded-2xl text-xs border border-white/20 bg-white/5 hover:bg-white/10 transition-colors" data-skill="walking">🚶 Walking</button>
+                    </div>
+
+                    <div class="mb-2 flex justify-between text-xs text-white/50">
+                        <span>Beginner</span><span>Intermediate</span><span>Expert</span>
+                    </div>
+                    <input type="range" id="autopilot-slider" min="0" max="100" value="0" class="w-full accent-indigo-500 mb-8" oninput="updateAutopilot(this.value)">
+
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-white/70">Prefrontal Cortex <span class="text-white/40">(conscious control)</span></span>
+                                <span id="pfc-pct" class="text-indigo-400 font-mono">100%</span>
+                            </div>
+                            <div class="h-3 bg-white/10 rounded-full overflow-hidden">
+                                <div id="pfc-bar" class="h-full rounded-full transition-all duration-500" style="width:100%; background: linear-gradient(90deg,#6366f1,#818cf8)"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-white/70">Basal Ganglia <span class="text-white/40">(habit circuits)</span></span>
+                                <span id="bg-pct" class="text-emerald-400 font-mono">0%</span>
+                            </div>
+                            <div class="h-3 bg-white/10 rounded-full overflow-hidden">
+                                <div id="bg-bar" class="h-full rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg,#10b981,#34d399)"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-white/70">Cerebellum <span class="text-white/40">(movement smoothing)</span></span>
+                                <span id="cb-pct" class="text-amber-400 font-mono">20%</span>
+                            </div>
+                            <div class="h-3 bg-white/10 rounded-full overflow-hidden">
+                                <div id="cb-bar" class="h-full rounded-full transition-all duration-500" style="width:20%; background: linear-gradient(90deg,#f59e0b,#fbbf24)"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="autopilot-label" class="text-center text-sm text-white/60 italic">
+                        "Every conscious step, every deliberate movement — your brain is working overtime."
+                    </div>
+                    <div class="mt-4 text-center text-xs text-white/40">
+                        This is why experts choke when they overthink — consciously interfering with an automatic process makes it worse.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 3: The Storyteller — tap to reveal what your brain really did -->
+        <div class="mb-16">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-indigo-400">INTERACTION 03</span>
+                <h3 class="text-3xl font-semibold mt-2">Are You the Author or the Character?</h3>
+                <p class="text-white/60 mt-2">Your left hemisphere constantly generates explanations for what your brain does — even when it has no idea why. This is "the interpreter." Tap each card to see what was really happening.</p>
+            </div>
+
+            <div id="control-visual" class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto">
+                    <div class="space-y-4 mb-8">
+                        <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-indigo-500/40 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                            <div class="font-medium text-sm mb-1">You chose coffee over tea this morning.</div>
+                            <div class="text-white/50 text-xs">Why? ↓ Tap to see what your brain was actually doing.</div>
+                            <div class="hidden mt-4 pt-4 border-t border-white/10 text-xs text-white/70 leading-relaxed">
+                                Your brain had already integrated dozens of signals: cortisol levels, sleep debt, taste memory, habit loops, ambient temperature — and produced a decision. Your conscious mind then constructed a narrative: "I just really felt like coffee." You were the last to know.
+                            </div>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-indigo-500/40 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                            <div class="font-medium text-sm mb-1">You felt irritated at someone for no clear reason.</div>
+                            <div class="text-white/50 text-xs">Why? ↓ Tap to see what your brain was actually doing.</div>
+                            <div class="hidden mt-4 pt-4 border-t border-white/10 text-xs text-white/70 leading-relaxed">
+                                Low blood sugar, disrupted sleep, or elevated cortisol had primed your amygdala to over-respond. Your conscious mind then invented a reason — "they were being annoying." The feeling came first. The reason came second. Always.
+                            </div>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-indigo-500/40 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                            <div class="font-medium text-sm mb-1">You felt certain you'd made a free choice.</div>
+                            <div class="text-white/50 text-xs">Why? ↓ Tap to see what your brain was actually doing.</div>
+                            <div class="hidden mt-4 pt-4 border-t border-white/10 text-xs text-white/70 leading-relaxed">
+                                Neuroscientists can predict simple binary decisions (left vs. right) up to 10 seconds before a person reports making them — just by reading fMRI data. The "decision" your consciousness experienced was the last step of a process that had already finished. The feeling of free will may be the brain's way of taking ownership of its own outputs.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-white/10 text-center text-sm text-white/60 italic">
+                        "We are not the captains of our ships. But perhaps, understanding this, we can become better navigators."
+                        <div class="text-xs text-white/30 mt-2">— David Eagleman</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Closing Insight -->
+        <div class="mt-16 p-10 border border-white/10 rounded-3xl bg-white/5 text-center">
+            <div class="max-w-md mx-auto">
+                <p class="text-xl leading-tight">You are not the pilot.<br>You are the passenger who thinks they are flying the plane.</p>
+                <p class="mt-6 text-sm text-white/60">But here's the twist: knowing this changes everything.<br>Awareness of the machinery gives you the only real leverage you have.</p>
+            </div>
+        </div>
+
+        <!-- Bridge to Chapter 4 -->
+        <div class="chapter-bridge scroll-reveal mt-6">
+            <div class="w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent mx-auto mb-8"></div>
+            <p class="text-white/40 text-sm uppercase tracking-widest mb-3">Next</p>
+            <p class="text-white/70 text-lg">If you're not the one in control… then who is deciding?</p>
+            <a href="#chapter-4" class="inline-flex items-center gap-2 mt-6 text-pink-400 text-sm hover:text-pink-300 transition-colors">
+                Continue to Chapter 4 <i class="fas fa-arrow-down text-xs"></i>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 4: How Do I Decide? -->
+    <!-- ============================================ -->
+    <div id="chapter-4" class="max-w-4xl mx-auto px-6 pb-24 border-t border-white/10 pt-10 overflow-x-hidden">
+
+        <!-- Chapter Header -->
+        <div class="mb-10 chapter-header">
+            <div class="flex items-center gap-x-4 mb-4 neural-glow">
+                <span class="px-4 py-1 text-xs font-mono tracking-[3px] bg-white/10 rounded-2xl chapter-badge-pill">CHAPTER 04</span>
+                <span class="text-xs text-pink-400/70">• HOW DO I DECIDE?</span>
+            </div>
+            <h2 class="section-header">Your decisions are made<br>before you make them.</h2>
+        </div>
+
+        <!-- Opening Narrative -->
+        <div class="prose prose-invert max-w-none text-[17px] leading-relaxed text-white/90 mb-16">
+            <p>On September 13, 1848, a railway foreman named Phineas Gage was tamping explosives into a rock when the charge detonated. A 13-pound iron rod — over a metre long — shot straight through his skull, entering below his left cheek and exiting through the top of his head.</p>
+
+            <p class="mt-6">He survived. He was talking within minutes. His memory, language, and movement were intact. But something fundamental had changed. Gage's doctor noted that he was "no longer Gage." Before the accident, he had been responsible, hardworking, and well-liked. After it, he was impulsive, profane, unable to follow through on plans, and indifferent to social consequences.</p>
+
+            <div class="story-block mt-6">
+                <p class="text-white/80 italic text-base">"He is fitful, irreverent, indulging at times in the grossest profanity... impatient of restraint or advice when it conflicts with his desires... his mind was radically changed, so decidedly that his friends and acquaintances said he was no longer Gage."</p>
+                <p class="text-sm text-white/40 mt-3 not-italic">— Dr. John Harlow, Gage's physician, 1868</p>
+            </div>
+
+            <p class="mt-8">The rod had destroyed Gage's prefrontal cortex — the part of the brain responsible for weighing consequences, planning, and regulating emotion. His case revealed something neuroscience has since confirmed: <strong>decision-making is not a rational process. It is an emotional one.</strong></p>
+
+            <p class="mt-6">Antonio Damasio, a neuroscientist at USC, studied patients with damage to the same brain region as Gage. They were intelligent. They reasoned perfectly. They could describe the pros and cons of any situation with precision. But they could not decide. They would spend hours choosing between lunch options, paralysed without a feeling to guide them.</p>
+
+            <div class="my-10 p-8 border border-white/10 rounded-3xl bg-white/5 text-center">
+                <p class="italic text-xl">"Feelings are not the opposite of reason. They are the foundation of it."</p>
+                <p class="text-sm text-white/50 mt-4">— Antonio Damasio, as cited by David Eagleman</p>
+            </div>
+
+            <p>Damasio called this the <strong>somatic marker hypothesis</strong>: when you face a decision, your brain rapidly replays past experiences as body sensations — a tightening in the chest, a flutter of excitement, a feeling of wrongness. These "gut feelings" are your brain's shortcut through infinite possible futures. Without them, reason alone cannot choose.</p>
+        </div>
+
+        <!-- Interaction 1: Phineas Gage Brain Map -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-pink-400">INTERACTION 01</span>
+                <h3 class="text-3xl font-semibold mt-2">The Phineas Gage Map</h3>
+                <p class="text-white/60 mt-2">Click each brain region to discover what it contributes to your decisions — and what happens when it's damaged.</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto">
+                    <!-- SVG brain side-view with clickable regions — fixed layout -->
+                    <div class="flex justify-center mb-6">
+                        <svg width="380" height="260" viewBox="0 0 380 260" class="mx-auto">
+                            <!-- Outer brain outline -->
+                            <ellipse cx="190" cy="118" rx="165" ry="108" fill="#0f0f1a" stroke="#1e293b" stroke-width="1.5"/>
+
+                            <!-- PFC — front top -->
+                            <ellipse id="pfc-region" cx="100" cy="82" rx="72" ry="52" fill="#1e1b4b" stroke="#6366f1" stroke-width="2" class="cursor-pointer" style="cursor:pointer;transition:all 0.3s" onclick="selectBrainRegion('pfc')"/>
+                            <text x="100" y="78" text-anchor="middle" fill="#a5b4fc" font-size="9.5" font-family="Inter" font-weight="600" style="pointer-events:none">Prefrontal</text>
+                            <text x="100" y="90" text-anchor="middle" fill="#a5b4fc" font-size="9.5" font-family="Inter" font-weight="600" style="pointer-events:none">Cortex</text>
+                            <text x="100" y="102" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="7.5" font-family="Inter" style="pointer-events:none">Planning · Decisions</text>
+
+                            <!-- Amygdala — mid left -->
+                            <ellipse id="amyg-region" cx="148" cy="158" rx="44" ry="32" fill="#1a0a0a" stroke="#ef4444" stroke-width="2" class="cursor-pointer" style="cursor:pointer;transition:all 0.3s" onclick="selectBrainRegion('amygdala')"/>
+                            <text x="148" y="154" text-anchor="middle" fill="#fca5a5" font-size="9.5" font-family="Inter" font-weight="600" style="pointer-events:none">Amygdala</text>
+                            <text x="148" y="166" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="7.5" font-family="Inter" style="pointer-events:none">Fear · Emotion</text>
+
+                            <!-- Striatum — centre -->
+                            <ellipse id="reward-region" cx="220" cy="118" rx="52" ry="38" fill="#0a1a0a" stroke="#22c55e" stroke-width="2" class="cursor-pointer" style="cursor:pointer;transition:all 0.3s" onclick="selectBrainRegion('reward')"/>
+                            <text x="220" y="114" text-anchor="middle" fill="#86efac" font-size="9.5" font-family="Inter" font-weight="600" style="pointer-events:none">Striatum</text>
+                            <text x="220" y="126" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="7.5" font-family="Inter" style="pointer-events:none">Reward · Habit</text>
+
+                            <!-- Insula — right mid -->
+                            <ellipse id="insula-region" cx="290" cy="148" rx="52" ry="36" fill="#0a0a1a" stroke="#f59e0b" stroke-width="2" class="cursor-pointer" style="cursor:pointer;transition:all 0.3s" onclick="selectBrainRegion('insula')"/>
+                            <text x="290" y="144" text-anchor="middle" fill="#fcd34d" font-size="9.5" font-family="Inter" font-weight="600" style="pointer-events:none">Insula</text>
+                            <text x="290" y="156" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="7.5" font-family="Inter" style="pointer-events:none">Gut feelings</text>
+
+                            <!-- Gage's rod path -->
+                            <line x1="80" y1="10" x2="115" y2="95" stroke="#ef4444" stroke-width="3" stroke-dasharray="5,3" opacity="0.4"/>
+                            <text x="48" y="22" fill="#ef4444" font-size="8" font-family="Inter" opacity="0.7">← Gage's rod</text>
+                        </svg>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-2 mb-5 text-xs">
+                        <button onclick="selectBrainRegion('pfc')" class="px-3 py-1.5 bg-indigo-500/15 border border-indigo-500/30 rounded-xl text-indigo-300 hover:bg-indigo-500/25 transition-all">Prefrontal Cortex</button>
+                        <button onclick="selectBrainRegion('amygdala')" class="px-3 py-1.5 bg-red-500/15 border border-red-500/30 rounded-xl text-red-300 hover:bg-red-500/25 transition-all">Amygdala</button>
+                        <button onclick="selectBrainRegion('reward')" class="px-3 py-1.5 bg-emerald-500/15 border border-emerald-500/30 rounded-xl text-emerald-300 hover:bg-emerald-500/25 transition-all">Striatum</button>
+                        <button onclick="selectBrainRegion('insula')" class="px-3 py-1.5 bg-amber-500/15 border border-amber-500/30 rounded-xl text-amber-300 hover:bg-amber-500/25 transition-all">Insula</button>
+                    </div>
+
+                    <div id="brain-region-info" class="min-h-[80px] text-center text-sm text-white/50 leading-relaxed mb-6 px-2 transition-all duration-300">
+                        ↑ Click a region or button to explore its role in decision-making
+                    </div>
+
+                    <div class="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-4 text-xs text-white/60">
+                        <strong class="text-indigo-400">Phineas Gage's injury:</strong> The iron rod destroyed the connection between his prefrontal cortex and his amygdala — severing the link between reason and emotion. Without emotional guidance, his decisions became erratic and socially destructive. He could think, but he could not <em>feel</em> the right answer.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 2: The Trolley Problem -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-pink-400">INTERACTION 02</span>
+                <h3 class="text-3xl font-semibold mt-2">The Trolley Problem</h3>
+                <p class="text-white/60 mt-2">A thought experiment that reveals the war inside your brain between cold logic and visceral emotion. What does your gut say?</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto" id="trolley-container">
+
+                    <!-- Scenario A -->
+                    <div id="trolley-scenario-a">
+                        <div class="mb-6 p-6 bg-white/5 rounded-2xl text-sm text-white/80 leading-relaxed">
+                            <p class="font-medium text-white mb-3">Scenario A — The Lever</p>
+                            <p>A runaway trolley is heading toward <strong>5 people</strong> tied to the tracks. You are standing next to a lever. If you pull it, the trolley will divert to a side track — killing <strong>1 person</strong> tied there instead.</p>
+                            <p class="mt-3 text-white/60">Do you pull the lever?</p>
+                        </div>
+                        <div class="flex gap-3 justify-center">
+                            <button onclick="chooseTrolley('lever', 'pull')" class="px-8 py-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 rounded-2xl text-sm text-emerald-300 transition-all">Yes — Pull it</button>
+                            <button onclick="chooseTrolley('lever', 'leave')" class="px-8 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 rounded-2xl text-sm text-red-300 transition-all">No — Don't pull</button>
+                        </div>
+                    </div>
+
+                    <!-- Scenario B (hidden until A answered) -->
+                    <div id="trolley-scenario-b" class="hidden">
+                        <div class="mb-6 p-6 bg-white/5 rounded-2xl text-sm text-white/80 leading-relaxed">
+                            <p class="font-medium text-white mb-3">Scenario B — The Bridge</p>
+                            <p>Same runaway trolley, same 5 people. But now you are on a bridge above the tracks. Next to you stands a large man. The only way to stop the trolley is to <strong>push him off the bridge</strong>. His body will stop the trolley — killing him but saving the 5.</p>
+                            <p class="mt-3 text-white/60">Do you push him?</p>
+                        </div>
+                        <div class="flex gap-3 justify-center">
+                            <button onclick="chooseTrolley('bridge', 'push')" class="px-8 py-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 rounded-2xl text-sm text-emerald-300 transition-all">Yes — Push him</button>
+                            <button onclick="chooseTrolley('bridge', 'leave')" class="px-8 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 rounded-2xl text-sm text-red-300 transition-all">No — Don't push</button>
+                        </div>
+                    </div>
+
+                    <!-- Result (hidden until both answered) -->
+                    <div id="trolley-result-lever" class="hidden"></div>
+                    <div id="trolley-result-bridge" class="hidden"></div>
+                    <div id="trolley-summary" class="hidden"></div>
+                    <div class="text-center mt-4">
+                        <button onclick="resetTrolley()" class="px-5 py-2 bg-white/10 hover:bg-white/20 rounded-2xl text-sm transition-colors">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 3: Emotion vs Reason slider -->
+        <div class="mb-16">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-pink-400">INTERACTION 03</span>
+                <h3 class="text-3xl font-semibold mt-2">The Decision Dial</h3>
+                <p class="text-white/60 mt-2">Real decisions sit somewhere between pure emotion and pure reason. Drag the dial and see how the balance shifts your choices — and what each extreme costs you.</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-6 border border-white/10 overflow-hidden">
+                <!-- 5-point labels above slider -->
+                <div class="flex justify-between text-xs text-white/40 mb-1 px-1">
+                    <span>Emotion</span><span>Gut</span><span>Balanced</span><span>Analytical</span><span>Reason</span>
+                </div>
+                <input type="range" id="decision-dial" min="0" max="100" value="50"
+                       class="w-full accent-pink-500 mb-6" oninput="setDialValue(this.value)">
+
+                <!-- Dynamic state label + description -->
+                <div class="text-center mb-5">
+                    <div id="dial-label" class="text-2xl font-bold text-pink-400 mb-2">Balanced</div>
+                    <div id="dial-desc" class="text-sm text-white/60 leading-relaxed">
+                        The optimal zone. Emotion provides signal, reason provides structure.
+                    </div>
+                </div>
+
+                <!-- 3-column stats — safe widths, no overflow -->
+                <div class="grid grid-cols-3 gap-3 text-center">
+                    <div class="bg-white/5 rounded-2xl p-3">
+                        <div class="text-white/40 text-xs mb-1">REGION</div>
+                        <div id="dial-region" class="font-semibold text-pink-400 text-xs leading-tight">PFC + Amygdala</div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-3">
+                        <div class="text-white/40 text-xs mb-1">SPEED</div>
+                        <div id="dial-speed" class="font-semibold text-xs">Minutes</div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-3">
+                        <div class="text-white/40 text-xs mb-1">RISK</div>
+                        <div id="dial-risk" class="font-semibold text-emerald-400 text-xs">Low</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Closing Insight -->
+        <div class="mt-16 p-10 border border-white/10 rounded-3xl bg-white/5 text-center closing-card">
+            <div class="max-w-md mx-auto">
+                <p class="text-xl leading-tight">You don't decide with your mind.<br>You decide with your whole body.</p>
+                <p class="mt-6 text-sm text-white/60">The next time a decision feels wrong, trust it.<br>Your body has already run the calculation.</p>
+            </div>
+        </div>
+
+        <!-- Bridge to Chapter 5 -->
+        <div class="chapter-bridge scroll-reveal mt-6">
+            <div class="w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent mx-auto mb-8"></div>
+            <p class="text-white/40 text-sm uppercase tracking-widest mb-3">Next</p>
+            <p class="text-white/70 text-lg">Your brain makes decisions — but it doesn't do it alone. It needs other people.</p>
+            <a href="#chapter-5" class="inline-flex items-center gap-2 mt-6 text-rose-400 text-sm hover:text-rose-300 transition-colors">
+                Continue to Chapter 5 <i class="fas fa-arrow-down text-xs"></i>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 5: Do I Need You? -->
+    <!-- ============================================ -->
+    <div id="chapter-5" class="max-w-4xl mx-auto px-6 pb-12 overflow-x-hidden border-t border-white/10 pt-10">
+
+        <!-- Chapter Header -->
+        <div class="mb-10 chapter-header">
+            <div class="flex items-center gap-x-4 mb-4 neural-glow">
+                <span class="px-4 py-1 text-xs font-mono tracking-[3px] bg-white/10 rounded-2xl chapter-badge-pill">CHAPTER 05</span>
+                <span class="text-xs text-rose-400/70">• DO I NEED YOU?</span>
+            </div>
+            <h2 class="section-header">Your brain was built<br>for other brains.</h2>
+        </div>
+
+        <!-- Opening Narrative -->
+        <div class="prose prose-invert max-w-none text-[17px] leading-relaxed text-white/90 mb-16">
+            <p>In the 1990s, an Italian neuroscientist named Giacomo Rizzolatti was studying how neurons in a macaque monkey's brain fired when it reached for a peanut. One afternoon, a researcher walked into the lab and picked up a peanut himself. The monkey's neurons fired — the exact same cells that fired when the monkey itself reached for the peanut.</p>
+
+            <p class="mt-6">The monkey hadn't moved. It hadn't done anything. But its brain had simulated the action of another being. Rizzolatti had stumbled upon what he would call <strong>mirror neurons</strong> — cells that blur the boundary between self and other.</p>
+
+            <div class="story-block mt-6">
+                <p class="text-white/80 italic text-base">"Mirror neurons dissolve the barrier between you and others. In a very real sense, we feel what others feel. We are wired to resonate with each other."</p>
+                <p class="text-sm text-white/40 mt-3 not-italic">— David Eagleman, <em>The Brain: The Story of You</em></p>
+            </div>
+
+            <p class="mt-8">This is why you wince when you watch someone stub their toe. Why you yawn when others yawn. Why a crowd's laughter makes things funnier. Your brain is not a sealed system — it is in constant, intimate dialogue with the brains around it.</p>
+
+            <p class="mt-6">But the need for others goes even deeper than empathy. In 2003, psychologist Naomi Eisenberger ran an experiment that would become one of neuroscience's most cited studies. She put subjects in an fMRI scanner and had them play an online ball-tossing game — "Cyberball" — with two other players. Then, mid-game, the other two players simply stopped throwing the ball to the subject. They were excluded.</p>
+
+            <p class="mt-6">The brain region that lit up was the <strong>anterior cingulate cortex</strong> — the same region that processes physical pain. Being left out of a ball game hurt, neurologically, in the same way that a burn hurts. <strong>Social pain is real pain.</strong> Your brain registers it with the same neural circuitry.</p>
+
+            <div class="my-10 p-8 border border-white/10 rounded-3xl bg-white/5 text-center">
+                <p class="italic text-xl">"Loneliness is not a failure of character. It is a signal from your brain — as urgent as hunger or thirst — that something essential is missing."</p>
+                <p class="text-sm text-white/50 mt-4">— David Eagleman</p>
+            </div>
+
+            <p>Studies show that chronic loneliness is as damaging to health as smoking 15 cigarettes a day. It elevates cortisol, impairs sleep, accelerates cognitive decline, and increases mortality by 26%. Your brain needs other brains the way your lungs need air.</p>
+        </div>
+
+        <!-- Interaction 1: Cyberball — social exclusion simulator -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-rose-400">INTERACTION 01</span>
+                <h3 class="text-3xl font-semibold mt-2">The Cyberball Experiment</h3>
+                <p class="text-white/60 mt-2">You are about to play the game that revealed social pain is real pain. Watch what happens — and notice what you feel.</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-lg mx-auto text-center">
+                    <!-- Game area -->
+                    <div id="cyberball-game" class="relative mb-6" style="height:200px;">
+                        <!-- Players -->
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 text-center">
+                            <div class="text-4xl mb-1" id="player-you">🧑</div>
+                            <div class="text-xs text-white/50">You</div>
+                        </div>
+                        <div class="absolute top-4 left-8 text-center">
+                            <div class="text-3xl mb-1" id="player-a">🤖</div>
+                            <div class="text-xs text-white/40">Player A</div>
+                        </div>
+                        <div class="absolute top-4 right-8 text-center">
+                            <div class="text-3xl mb-1" id="player-b">🤖</div>
+                            <div class="text-xs text-white/40">Player B</div>
+                        </div>
+                        <!-- Ball -->
+                        <div id="cyberball" class="absolute text-2xl transition-all duration-500" style="bottom:48px;left:50%;transform:translateX(-50%)">⚽</div>
+                        <!-- Status -->
+                        <div id="cyberball-status" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-white/60 w-48 text-center hidden"></div>
+                    </div>
+
+                    <div id="cyberball-controls">
+                        <button id="cyberball-btn" onclick="startCyberball()" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-2xl text-sm transition-colors mb-3">Start Game</button>
+                        <p class="text-xs text-white/40">Eisenberger (2003) — published in <em>Science</em></p>
+                    </div>
+
+                    <div id="cyberball-result" class="hidden mt-6">
+                        <div class="p-5 bg-rose-500/10 border border-rose-500/20 rounded-2xl text-sm text-white/70 text-left leading-relaxed">
+                            <p class="font-medium text-white mb-2">What your brain just did</p>
+                            <p>The anterior cingulate cortex — your pain centre — activated when you were excluded. Naomi Eisenberger's subjects reported feeling genuinely hurt, upset, and bad about themselves after just 2 minutes of a ball game.</p>
+                            <p class="mt-2">Remarkably, when subjects were given <strong>acetaminophen (paracetamol)</strong> before the game, their social pain decreased. A painkiller reduced social rejection. Your brain truly cannot tell the difference.</p>
+                        </div>
+                        <button onclick="resetCyberball()" class="mt-4 px-5 py-2 bg-white/10 hover:bg-white/20 rounded-2xl text-sm transition-colors">Play Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 2: Mirror Neuron empathy test -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-rose-400">INTERACTION 02</span>
+                <h3 class="text-3xl font-semibold mt-2">Your Mirror Neurons</h3>
+                <p class="text-white/60 mt-2">When you observe another person's action or emotion, your brain partially simulates it. These mirror neurons are the neural basis of empathy, imitation, and human connection. Test yours.</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto">
+                    <div class="grid md:grid-cols-2 gap-4 mb-6" id="mirror-cards">
+                        <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-rose-500/40 border border-transparent transition-all text-center" onclick="triggerMirror(this, 'yawn')">
+                            <div class="text-5xl mb-3">🥱</div>
+                            <div class="text-sm font-medium">Look at this yawn</div>
+                            <div class="text-xs text-white/50 mt-1">Did you just yawn?</div>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-rose-500/40 border border-transparent transition-all text-center" onclick="triggerMirror(this, 'wince')">
+                            <div class="text-5xl mb-3">😣</div>
+                            <div class="text-sm font-medium">Someone stubs their toe</div>
+                            <div class="text-xs text-white/50 mt-1">Did you feel it?</div>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-rose-500/40 border border-transparent transition-all text-center" onclick="triggerMirror(this, 'smile')">
+                            <div class="text-5xl mb-3">😄</div>
+                            <div class="text-sm font-medium">A genuine smile</div>
+                            <div class="text-xs text-white/50 mt-1">Did your face change?</div>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-rose-500/40 border border-transparent transition-all text-center" onclick="triggerMirror(this, 'disgust')">
+                            <div class="text-5xl mb-3">🤢</div>
+                            <div class="text-sm font-medium">Someone tastes something awful</div>
+                            <div class="text-xs text-white/50 mt-1">Did you feel disgust?</div>
+                        </div>
+                    </div>
+                    <div id="mirror-result" class="hidden text-center text-sm text-white/60 p-4 bg-white/5 rounded-2xl leading-relaxed"></div>
+
+                    <div class="mt-6 pt-6 border-t border-white/10 grid md:grid-cols-2 gap-4 text-xs text-white/60">
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <div class="font-medium text-white/80 mb-1">Why this matters</div>
+                            Mirror neurons fire both when you act and when you observe the same action. They may be the neural basis of empathy — feeling what others feel without being told to.
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <div class="font-medium text-white/80 mb-1">The social brain</div>
+                            Humans have the largest neocortex-to-brain ratio of any animal. Robin Dunbar's research suggests this evolved specifically to manage complex social relationships — not to use tools or solve abstract problems.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 3: Loneliness health impact -->
+        <div class="mb-16">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-rose-400">INTERACTION 03</span>
+                <h3 class="text-3xl font-semibold mt-2">The Loneliness Prescription</h3>
+                <p class="text-white/60 mt-2">Loneliness is not an emotion. It is a biological signal — as measurable and dangerous as high blood pressure. Tap each effect to see the science.</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto space-y-3">
+                    <div class="bg-white/5 rounded-2xl p-4 cursor-pointer hover:border-rose-500/30 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🧠</div>
+                            <div>
+                                <div class="font-medium text-sm">Cognitive decline accelerates</div>
+                                <div class="text-xs text-white/50 mt-0.5">Tap to see the research ↓</div>
+                            </div>
+                        </div>
+                        <div class="hidden mt-3 pt-3 border-t border-white/10 text-xs text-white/70 leading-relaxed">
+                            Lonely individuals show faster cognitive decline and have a 64% increased risk of developing dementia. The brain literally shrinks faster without social stimulation — particularly the prefrontal cortex and hippocampus.
+                        </div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-4 cursor-pointer hover:border-rose-500/30 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">❤️</div>
+                            <div>
+                                <div class="font-medium text-sm">Heart disease risk rises 29%</div>
+                                <div class="text-xs text-white/50 mt-0.5">Tap to see the research ↓</div>
+                            </div>
+                        </div>
+                        <div class="hidden mt-3 pt-3 border-t border-white/10 text-xs text-white/70 leading-relaxed">
+                            A 2016 meta-analysis of 23 studies found loneliness increases the risk of coronary heart disease by 29% and stroke by 32%. Chronic social isolation keeps cortisol elevated, inflaming arteries over time.
+                        </div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-4 cursor-pointer hover:border-rose-500/30 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🦠</div>
+                            <div>
+                                <div class="font-medium text-sm">Immune system weakens</div>
+                                <div class="text-xs text-white/50 mt-0.5">Tap to see the research ↓</div>
+                            </div>
+                        </div>
+                        <div class="hidden mt-3 pt-3 border-t border-white/10 text-xs text-white/70 leading-relaxed">
+                            John Cacioppo's research showed lonely people have higher levels of inflammatory markers and lower antiviral gene expression. Your immune system responds to your social world — isolation literally makes you more vulnerable to infection.
+                        </div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-4 cursor-pointer hover:border-rose-500/30 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🌙</div>
+                            <div>
+                                <div class="font-medium text-sm">Sleep quality degrades</div>
+                                <div class="text-xs text-white/50 mt-0.5">Tap to see the research ↓</div>
+                            </div>
+                        </div>
+                        <div class="hidden mt-3 pt-3 border-t border-white/10 text-xs text-white/70 leading-relaxed">
+                            Lonely individuals spend less time in deep slow-wave sleep — the restorative phase. Their brains remain on "threat alert" during the night, as if danger could arrive at any moment. Your brain evolved to feel safe only in the presence of others.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Closing Insight -->
+        <div class="mt-16 p-10 border border-white/10 rounded-3xl bg-white/5 text-center closing-card">
+            <div class="max-w-md mx-auto">
+                <p class="text-xl leading-tight">You are not an isolated mind.<br>You are a node in a living network of minds.</p>
+                <p class="mt-6 text-sm text-white/60">Every conversation, every shared glance, every moment of feeling truly understood — these are not luxuries. They are neurological necessities.</p>
+            </div>
+        </div>
+
+        <!-- Bridge to Chapter 6 -->
+        <div class="chapter-bridge scroll-reveal mt-6">
+            <div class="w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent mx-auto mb-8"></div>
+            <p class="text-white/40 text-sm uppercase tracking-widest mb-3">Next</p>
+            <p class="text-white/70 text-lg">You need others. But who will the brain — and the "you" inside it — become in the future?</p>
+            <a href="#chapter-6" class="inline-flex items-center gap-2 mt-6 text-teal-400 text-sm hover:text-teal-300 transition-colors">
+                Continue to Chapter 6 <i class="fas fa-arrow-down text-xs"></i>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 6: Who Will We Be? -->
+    <!-- ============================================ -->
+    <div id="chapter-6" class="max-w-4xl mx-auto px-6 pb-32 border-t border-white/10 pt-10">
+
+        <!-- Chapter Header -->
+        <div class="mb-10 chapter-header">
+            <div class="flex items-center gap-x-4 mb-4 neural-glow">
+                <span class="px-4 py-1 text-xs font-mono tracking-[3px] bg-white/10 rounded-2xl chapter-badge-pill">CHAPTER 06</span>
+                <span class="text-xs text-teal-400/70">• WHO WILL WE BE?</span>
+            </div>
+            <h2 class="section-header">The brain is not finished.<br>Neither are you.</h2>
+        </div>
+
+        <!-- Opening Narrative -->
+        <div class="prose prose-invert max-w-none text-[17px] leading-relaxed text-white/90 mb-16">
+            <p>For most of human history, the brain was considered fixed. After childhood, you were stuck with the mind you had. But the last three decades of neuroscience have overturned this completely. The brain never stops changing — and in the coming decades, we will gain the ability to change it deliberately, precisely, and at a scale that raises profound questions about what it means to be human.</p>
+
+            <p class="mt-6">Consider what is already possible. A paralysed woman named Jan Scheuermann, who had not moved her arms in nine years, learned to feed herself chocolate using a robotic arm controlled entirely by thought — by electrodes implanted in her motor cortex. Henry Molaison, known as "H.M.", had his hippocampus removed to treat epilepsy in 1953 — and could never form a new memory again for the remaining 55 years of his life. His case taught us more about memory than any other in history.</p>
+
+            <div class="story-block mt-6">
+                <p class="text-white/80 italic text-base">"We are living at an extraordinary moment: for the first time in history, one part of nature is gaining the ability to understand — and redesign — another part. The question is not whether we will change the brain. The question is how wisely we will do it."</p>
+                <p class="text-sm text-white/40 mt-3 not-italic">— David Eagleman, <em>The Brain: The Story of You</em></p>
+            </div>
+
+            <p class="mt-8">What does this mean for identity? If you could erase a traumatic memory, would you still be you? If a brain implant made you smarter, kinder, or more creative — would it be you who became those things? And if we can read brain states with sufficient resolution to decode thoughts, what happens to privacy, to justice, to the very concept of personal responsibility?</p>
+
+            <div class="my-10 p-8 border border-white/10 rounded-3xl bg-white/5 text-center">
+                <p class="italic text-xl">"The key insight of neuroscience is that you are your brain. And your brain is more flexible, more plastic, more changeable than anyone previously imagined."</p>
+                <p class="text-sm text-white/50 mt-4">— David Eagleman</p>
+            </div>
+        </div>
+
+        <!-- Interaction 1: Memory editing — would you erase it? -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-teal-400">INTERACTION 01</span>
+                <h3 class="text-3xl font-semibold mt-2">Would You Erase the Memory?</h3>
+                <p class="text-white/60 mt-2">Scientists can already selectively weaken specific memories in mice. In humans, propranolol can dull the emotional charge of traumatic memories. Would you use it?</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto space-y-4">
+                    <div class="bg-white/5 rounded-2xl p-5">
+                        <p class="text-sm font-medium mb-3">You were in a serious car crash. The memory gives you panic attacks that prevent you from driving.</p>
+                        <div class="flex gap-3 mb-0">
+                            <button onclick="memoryChoice(1,'yes')" class="px-5 py-2 bg-teal-500/20 hover:bg-teal-500/30 border border-teal-500/30 rounded-xl text-xs text-teal-300 transition-all">Erase it</button>
+                            <button onclick="memoryChoice(1,'no')" class="px-5 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs text-white/60 transition-all">Keep it</button>
+                        </div>
+                        <div id="mem-reveal-1" class="hidden mt-3 text-xs text-white/60 leading-relaxed pt-3 border-t border-white/10">Most ethicists agree: if a memory causes only suffering and no growth, erasing its emotional sting is compassionate. But — does removing the pain also remove the lesson?</div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-5">
+                        <p class="text-sm font-medium mb-3">You had your heart broken. The memory made you who you are — but it still hurts.</p>
+                        <div class="flex gap-3">
+                            <button onclick="memoryChoice(2,'yes')" class="px-5 py-2 bg-teal-500/20 hover:bg-teal-500/30 border border-teal-500/30 rounded-xl text-xs text-teal-300 transition-all">Erase it</button>
+                            <button onclick="memoryChoice(2,'no')" class="px-5 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs text-white/60 transition-all">Keep it</button>
+                        </div>
+                        <div id="mem-reveal-2" class="hidden mt-3 text-xs text-white/60 leading-relaxed pt-3 border-t border-white/10">The harder case. The memory shaped you. Erasing it might erase the growth. Or: perhaps the growth is already encoded in your neural structure — the memory itself no longer needed. <em>Who decides which pain is worth keeping?</em></div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-5">
+                        <p class="text-sm font-medium mb-3">You witnessed something terrible happen to someone else. The memory haunts you.</p>
+                        <div class="flex gap-3">
+                            <button onclick="memoryChoice(3,'yes')" class="px-5 py-2 bg-teal-500/20 hover:bg-teal-500/30 border border-teal-500/30 rounded-xl text-xs text-teal-300 transition-all">Erase it</button>
+                            <button onclick="memoryChoice(3,'no')" class="px-5 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs text-white/60 transition-all">Keep it</button>
+                        </div>
+                        <div id="mem-reveal-3" class="hidden mt-3 text-xs text-white/60 leading-relaxed pt-3 border-t border-white/10">Witnesses to atrocities carry collective memory for society. Erasing it raises questions of accountability, testimony, and justice. Memory is not just personal — it is social.</div>
+                    </div>
+                    <p class="text-xs text-white/30 text-center pt-2">There are no right answers. These are the questions neuroscience is placing on the table — right now, this decade.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 2: Brain enhancement spectrum -->
+        <div class="mb-20">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-teal-400">INTERACTION 02</span>
+                <h3 class="text-3xl font-semibold mt-2">The Enhancement Spectrum</h3>
+                <p class="text-white/60 mt-2">From sleep to neural implants — humans have always tried to enhance the brain. Drag the slider across the spectrum and see where the ethical lines are drawn.</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex justify-between text-xs text-white/40 mb-3 px-1">
+                        <span>Natural</span><span>Enhancement</span>
+                    </div>
+                    <input type="range" id="enhance-slider" min="0" max="100" value="0" class="w-full accent-teal-500 mb-6" oninput="updateEnhancement(this.value)">
+                    <div id="enhance-display" class="p-5 bg-white/5 rounded-2xl text-center mb-4">
+                        <div id="enhance-name" class="text-lg font-semibold mb-1">Sleep</div>
+                        <div id="enhance-label" class="text-lg font-semibold text-teal-300 mb-2">Sleep</div>
+                        <div class="w-full bg-white/10 rounded-full h-2 mb-3">
+                            <div id="enhance-bar" class="h-2 rounded-full transition-all duration-500" style="width:20%;background:linear-gradient(90deg,#6366f1,#6366f1)"></div>
+                        </div>
+                        <div id="enhance-effect" class="text-sm text-teal-400 mb-2">+20–30% memory consolidation</div>
+                        <div id="enhance-ethics" class="text-xs text-white/50 leading-relaxed mb-2">Universally accepted.</div>
+                        <div id="enhance-desc" class="text-xs text-white/60 leading-relaxed italic">During deep sleep, your hippocampus replays the day's memories and transfers them to the cortex.</div>
+                    </div>
+                    <div class="grid grid-cols-5 gap-1 text-center text-xs text-white/25 mt-2">
+                        <div>Sleep</div><div>Exercise</div><div>Caffeine</div><div>Nootropics</div><div>Implants</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction 3: Neuroscience frontier timeline -->
+        <div class="mb-16">
+            <div class="mb-6">
+                <span class="text-xs font-mono tracking-widest text-teal-400">INTERACTION 03</span>
+                <h3 class="text-3xl font-semibold mt-2">The Neuroscience Frontier</h3>
+                <p class="text-white/60 mt-2">These are not predictions. They are things already happening in labs. Click each to see how close we are.</p>
+            </div>
+
+            <div class="bg-black/40 rounded-3xl p-8 border border-white/10">
+                <div class="max-w-2xl mx-auto space-y-3">
+                    <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-teal-500/30 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3"><div class="text-2xl">🦾</div><div class="font-medium text-sm">Brain-computer interfaces</div></div>
+                            <span class="text-xs text-teal-400 font-mono bg-teal-500/10 px-2 py-1 rounded-lg">NOW</span>
+                        </div>
+                        <div class="hidden mt-3 pt-3 border-t border-white/10 text-xs text-white/70 leading-relaxed">Neuralink, BrainGate, and others have already implanted electrodes in human brains allowing paralysed patients to control computers and robotic arms using thought alone. In 2023, a paralysed man typed 40 words per minute using a brain implant.</div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-teal-500/30 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3"><div class="text-2xl">🧬</div><div class="font-medium text-sm">Targeted memory editing</div></div>
+                            <span class="text-xs text-amber-400 font-mono bg-amber-500/10 px-2 py-1 rounded-lg">5–10 YRS</span>
+                        </div>
+                        <div class="hidden mt-3 pt-3 border-t border-white/10 text-xs text-white/70 leading-relaxed">Researchers at MIT have already implanted false memories in mice and selectively erased fear memories. In humans, propranolol during memory reconsolidation can dampen traumatic recall. Targeted memory editing in humans is likely within a decade.</div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-teal-500/30 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3"><div class="text-2xl">📡</div><div class="font-medium text-sm">Brain-to-brain communication</div></div>
+                            <span class="text-xs text-amber-400 font-mono bg-amber-500/10 px-2 py-1 rounded-lg">10–20 YRS</span>
+                        </div>
+                        <div class="hidden mt-3 pt-3 border-t border-white/10 text-xs text-white/70 leading-relaxed">In 2014, researchers sent a simple thought from one brain in India to another in France using EEG and TMS. The signal was basic — but the proof of concept exists. Direct brain-to-brain communication is now an engineering problem, not a scientific one.</div>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-5 cursor-pointer hover:border-teal-500/30 border border-transparent transition-all" onclick="revealStoryteller(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3"><div class="text-2xl">♾️</div><div class="font-medium text-sm">Uploading consciousness</div></div>
+                            <span class="text-xs text-white/30 font-mono bg-white/5 px-2 py-1 rounded-lg">UNKNOWN</span>
+                        </div>
+                        <div class="hidden mt-3 pt-3 border-t border-white/10 text-xs text-white/70 leading-relaxed">Mapping every synapse and running it as software remains deeply speculative. We don't know if consciousness arises from the pattern of connections alone, or from the biological substrate itself. The hard problem of consciousness may make this forever impossible — or it may be solved next century.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Closing — the whole journey -->
+        <div class="mt-20 p-12 border border-white/10 rounded-3xl text-center relative overflow-hidden" style="background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.06), rgba(20,184,166,0.05));">
+            <div class="max-w-lg mx-auto relative z-10">
+                <div class="text-5xl mb-6">🧠</div>
+                <p class="text-2xl font-semibold leading-tight mb-6">You have just travelled through<br>the most complex object in the universe.</p>
+                <p class="text-white/60 leading-relaxed text-base mb-8">It constructs your reality. It shapes who you are. It drives your decisions without asking. It craves connection. And it is just beginning to understand itself.</p>
+                <div class="w-px h-12 bg-gradient-to-b from-transparent via-white/20 to-transparent mx-auto mb-6"></div>
+                <p class="text-white/40 text-sm italic">"There is nothing more mysterious, more complex, or more beautiful<br>than the three pounds of matter between your ears."</p>
+                <p class="text-white/25 text-xs mt-3">— David Eagleman</p>
+                <div class="mt-10 flex flex-wrap justify-center gap-3 text-xs">
+                    <span onclick="scrollToChapter('hero')" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/50 transition-colors cursor-pointer">↑ Start Again</span>
+                    <span onclick="scrollToChapter('chapter-1')" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/50 transition-colors cursor-pointer">Ch 1: Who Are You?</span>
+                    <span onclick="scrollToChapter('chapter-4')" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/50 transition-colors cursor-pointer">Ch 4: How Do I Decide?</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
